@@ -1,0 +1,62 @@
+% !TeX root = ../main.tex
+\documentclass[./../main.tex]{subfiles}
+
+\begin{document}
+Đối với các lỗ hổng ở hệ thống, việc đảm bảo an ninh sẽ được phụ thuộc vào nhà cung cấp sản phẩm, dịch vụ sử dụng trong hệ thống.
+Các lỗ hổng thường chỉ được công khai sau khi đã có các bản vá, do đó các hệ thống sẽ an toàn khi được cập nhật liên tục.
+Trái lại với đó, các ứng dụng Web thường chỉ được vá bởi nhà phát triển và rất phụ thuộc vào các dịch vụ kiểm thử xâm nhập.
+Trong năm 2021, riêng nền tảng HackerOne đã nhận được hơn 66.000 lỗ hổng được báo cáo tới các đơn vị triển khai trên nền tảng.
+Chính vì do thường là các sản phẩm được tự phát triển, các khía cạnh an ninh sẽ được xem xét ở pha cuối cùng và thường chỉ đợt
+kiểm tra trong các đợt kiểm thử xâm nhập, do đó các lỗ hổng tồn tại sẽ nằm trong mã nguồn sản phẩm chứ không phải của hệ thống. Một số báo cáo năm 2019
+chỉ ra rằng khoảng 82\% lỗ hổng nằm trong mã nguồn và hầu hết các trang web đều có lỗ hổng mức nghiêm trọng.
+
+Với một cuộc kiểm thử xâm nhập, một quy trình đặc trưng có thể có các bước sau đây
+\begin{description}
+	\item [Thu thập thông tin] thu thập các thông tin về mục tiêu như thông tin về hệ thống, ứng dụng.
+	\item [Khảo sát] từ các thông tin bên trên, tiếp tục khảo sát về hạ tầng, các dịch vụ đang sử dụng từ các nguồn trên Internet.
+	\item [Khám phá và rà quét] với mỗi trang Web cụ thể sẽ thực hiện khám phá và rà quét các lỗ hổng để thu thập được lượng lớn điểm khả nghi là lỗ hổng nhất.
+	\item [Chỉ thị các lỗ hổng] xác minh lại và chỉ ra lỗ hổng bảo mật có tồn tại hay không và đánh giá tác động của nó.
+	\item [Khai thác và hậu khai thác] đối với một số cuộc tấn công sẽ có yêu cầu khai thác và hậu khai thác lỗ hổng để chỉ ra ảnh hưởng trong trường hợp bị tấn công.
+	\item [Duyệt và báo cáo] tổng hợp lỗ hổng, đảm bảo chất lượng của báo cáo và gửi lại báo cáo cho đơn vị.
+\end{description}
+Trong đó, các các bước như thu thập thông tin, khảo sát, khám phá và rà quét hiện nay đã được tự động hóa phần lớn bằng các công cụ tự động. Tuy nhiên, để các lỗ hổng được đánh giá là có tồn tại hay không thì cần được xác minh lại bằng phương pháp thủ công, làm tốn lượng lớn thời gian. Tuy nhiên, với một số lỗ hổng nghiêm trọng có thể chỉ ra ngay được tính đúng đắn của lỗ hổng và tác động của nó tới hệ thống như SQL Injection, Command Injection,...
+
+Do đó, nếu có thể thích hợp các công cụ này vào trong quá trình kiểm thử xâm nhập sẽ giúp giảm được thời gian xác minh các lỗ hổng này, đưa ra được tác động của nó. Nắm được điều này hiện tại, trên thị trường đã có các công cụ tự động sử dụng cơ chế Proof-of-Exploit để đưa ra các báo cáo có độ dương tính giả thấp, điển hình là Invicti (Netsparker).
+
+Open Web Application Security Project (OWASP) là một tổ chức phi lợi nhuận quốc tế chuyên về bảo mật ứng dụng web. OWASP thường đưa ra các khuyến cáo cho từng loại lỗ hổng về độ nguy hiểm và cách phòng, chống trong thực tế. OWASP Top 10 là báo cáo, đánh giá các loại lỗ hổng theo danh mục, được xếp hạng theo độ quan trọng nhất được cập nhật thường xuyên bởi một nhóm chuyên gia đến từ nhiều quốc gia, tổ chức trên toàn cầu. OWASP Top 10 thường được sử dụng làm tiêu chuẩn cho việc đánh giá an toàn thông tin ở nhiều tổ chức.
+
+Năm 2021, OWASP tiếp tục được cập nhật thêm so với lần cuối cùng là năm 2017. Báo cáo được liệt kê với 10 danh mục sau
+\begin{enumerate}
+	\item A01 Broken Access Control
+	\item A02 Cryptographic Failures
+	\item A03 Injection
+	\item A04 Insecure Design
+	\item A05 Security Misconfiguration
+	\item A06 Vulnerable and Outdated Components
+	\item A07 Identification and Authentication Failures
+	\item A08 Software and Data Integrity Failures
+	\item A09 Security Logging and Monitoring Failures
+	\item A10 Server Side Request Forgery (SSRF)
+\end{enumerate}
+Với việc hợp nhất các lỗ hổng, thay đổi danh mục, xếp hạng có nhiều sự thay đổi như việc đưa Broken Access Control và Cryptographic Failures lên đầu thay cho Injection cho thấy việc các chuyên gia nhận thấy sự quan trọng của việc bảo mật thông tin so với các bảng xếp hạng trước đây. Tuy nhiên, Injection vẫn luôn đứng hạng đầu do sự phổ biến của việc không kiểm soát đầu vào của người dùng dẫn đến trình duyệt hoặc máy chủ có thể thực thi câu lệnh có hành vi bất thường.
+
+Các lỗ hổng Injection phía máy chủ dễ dàng xác minh và đánh giá tự động ảnh hưởng tới ứng dụng Web bằng cách đưa ra các bằng chứng về việc khai thác các lỗ hổng đó trên máy chủ. Tuy nhiên với các lỗ hổng Injection liên quan đến việc chèn, thực thi câu lệnh phía người dùng thường dễ được xác minh tự động bằng cách cung cấp đường dẫn nhưng lại rất khó đánh giá được tự động tác động do cần có một kịch bản cụ thể và nghiệp vụ cụ thể để xác minh.
+
+Với công cụ thương mại Invicti (Netsparker) cho phép xác minh tự động các lỗ hổng và cho phép sinh ra PoE về các lỗ hổng điển hình như sau
+\begin{itemize}
+	\item SQL Injection
+	\item Boolean SQL Injection
+	\item Blind SQL Injection
+	\item Remote File Inclusion (RFI) (New)
+	\item Command Injection (New)
+	\item Blind Command Injection (New)
+	\item XML External Entity (XXE) Injection
+	\item Remote Code Evaluation
+	\item Local File Inclusion (LFI)
+	\item Server-side Template Injection
+	\item Remote Code Execution
+	\item Injection via Local File Inclusion
+\end{itemize}
+
+OWASP Zed Attack Proxy (ZAP) một công cụ bảo mật mã nguồn mở được phát triển và duy trì bởi cộng đồng với OWASP là tổ chức bảo hộ. ZAP là một công cụ phổ biến được sử dụng trong quá trình kiểm thử xâm nhập các ứng dụng Web do khả năng làm việc tự động với quét lỗ hổng thụ động và quét lỗ hổng chủ động với tính tự động cao. Với việc bổ sung các công cụ tự động xác minh, khai thái nhưng SQLMap, Commix, Tplmap,... sẽ khiển quá trình kiểm thử sử dụng công cụ giảm được thời gian xác minh lỗ hổng.
+\end{document}
