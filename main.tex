@@ -47,7 +47,7 @@
 \DeclareGraphicsExtensions{.png,.eps,.svg}
 \setlist[description]{leftmargin=\parindent,labelindent=\parindent}
 
-\title{Hệ thống quản lý thực tập UETWork}
+\title{Phát triển một công cụ hỗ trợ phát hiện và khai thác tự động các lỗ hổng Web}
 
 \pagenumbering{roman}
 \begin{document}
@@ -57,15 +57,21 @@
 
 \chapter*{Tóm tắt}
 
-Hiện nay, kết nối sinh viên với nhà tuyển dụng là một nhu cầu thiết yếu của trường Đại học Công Nghệ. Đối với sinh viên, thực tập là một trải nghiệm quý báu, giúp họ áp dụng kiến thức đã học vào dự án thực tế và phát triển kỹ năng mềm như kỹ năng giao tiếp và làm việc nhóm. Mặt khác, nhà tuyển dụng luôn có nhu cầu tìm kiếm sinh viên tài năng để tham gia vào dự án phần mềm của mình.
+Zed Attack Proxy (ZAP) là một công cụ mã nguồn mở giúp rà soát lỗ hổng tự động theo tập luật được phát triển liên tục bởi cộng đồng. Tuy nhiên, ZAP lại thiếu đi các công cụ xác minh và khai thác các lỗ hổng. Công cụ Naf được phát triển sẽ giúp bổ sung cho ZAP về việc xác minh và khai thác lỗ hổng phía máy chủ Web tự động.
 
-Để giải quyết nhu cầu này, trường Đại học Công Nghệ đã phát triển hệ thống thực tập UETWork \footnote{\url{http://112.137.129.69:8000}}. Tuy nhiên, hệ thống này đã thể hiện một số nhược điểm trong thời gian được sử dụng như thiếu tính năng cho giảng viên và công ty, khó sử dụng, \ldots{} Hệ thống UETWork mới được mô tả trong khóa luận này đã được phát triển để giải quyết những vấn đề đó.
+Hiện tại với công cụ, đã có thể xác minh được các lỗng hổng mức nguy hiểm như SQL Injection, Command Injection, Remengineote File Inclusion, Server Side Template Injection,... với độ chính xác cao, đảm bảo được tỉ lệ dương tính giả thấp, từ đó lược bỏ được phần lớn công đoạn xác minh lỗ hổng đối với các lỗ hổng nguy hiểm này. So với các công cụ thương mại trên thị trường như Invicti (trước đây là Netsparker) thì công đã bổ sung cho ZAP tính năng tương đương, với độ tin tưởng cao.
+
+Công cụ có sử dụng các bộ công cụ mã nguồn mở phổ biến như SQLMap, Commix, TplMap,... làm engine để thực hiện quá trình xác minh, cung cấp thêm các công cụ khai thác tự động. Do đều là các công cụ mã nguồn mở được bảo trì liên tục nên có khả năng khai thác được miền rất rộng các lỗ hổng với kỹ thuật được cập nhật
 
 \chapter*{Lời cảm ơn}
 
-Đầu tiên, em muốn gửi lời cảm ơn tới TS\. Dương Lê Minh, người đã giúp đỡ em trong quá trình hoàn thành báo cáo này.
-Em cũng xin gửi lời cảm ơn chân thành đến Ban giám hiệu trường Đại học Công nghệ - ĐHQGHN, quý thầy cô khoa Công Nghệ Thông Tin đã tận tâm giảng dạy cho em những kiến thức cần thiết để em có thể hoàn thành tốt khóa luận tốt nghiệp này.
-Vì kiến thức chuyên môn của bản thân còn nhiều hạn chế, khóa luận của em có thể vẫn còn một vài điểm chưa được hoàn hảo, kính mong nhà trường và thầy cô thông cảm và đóng góp ý kiến giúp em hoàn thiện hơn.
+Lời đầu tiên cho phép em được gửi lời cảm ơn tới Khoa Công Nghệ Thông Tin – Trường Đại học Công Nghệ ĐHQG Hà Nội đã tạo điều kiện thuận lợi cho em được học tập, nghiên cứu và thực hiện đề tài tốt nghiệp này.
+
+Em cũng xin được bày tỏ lòng biết ơn sâu sắc tới thầy Nguyễn Đại Thọ đã tận tình hướng dẫn, đóng góp những ý kiến giúp em hoàn thành khóa luận tốt nghiệp một cách tốt nhất.
+
+Em cũng vô cùng biết ơn các thầy cô trong trường tận tình giảng dạy, truyền thụ cho em những kiến thức và kỹ năng quan trọng làm hành trang vững chắc trên con đường học vấn của bản thân.
+
+Chúc mọi người luôn luôn mạnh khoẻ và gặt hái được nhiều thành công trong cuộc sống.
 
 \chapter*{Lời cam đoan}
 
