@@ -17,6 +17,13 @@ Do đó, công cụ Naf được sinh ra để thống nhất việc tương tá
 \subsection{Các component}
 Các thành phần sẽ được mô hình hóa thành các Component. Mỗi Component sẽ phụ trách một Logic riêng theo từng phần của công cụ. Các Component này phụ thuộc nhau dạng cây.
 
+Hình \ref{fig:component} Biểu đồ phụ thuộc của các Component.
+
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/component.drawio.png}
+	\caption{Biểu đồ phụ thuộc của các Component}
+	\label{fig:component}
+\end{figure}
 
 Đối với ngôn ngữ triển khai em lựa chọn, Kotlin là một ngôn ngữ JVM có thể tương tác được với Java để phát triển.
 
@@ -77,7 +84,13 @@ Công cụ SQLMap, đi kèm với một API Server nên việc giao tiếp có t
 
 Lúc này các nhiệm vụ khai thác được mô hình hóa thành các Job, API Server sẽ xử lý các Job trong Job Pool và trả về dữ liệu theo các yêu cầu của công cụ gửi lên. Các yêu cầu có thể là xác minh lỗ hổng, lấy các thông tin của cơ sở dữ liệu.
 
+Hình \ref{fig:sqlmap} Biểu đồ tương tác giữa SQLMap và công cụ..
 
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/SQLMap.drawio.png}
+	\caption{Biểu đồ tương tác giữa SQLMap và công cụ.}
+	\label{fig:sqlmap}
+\end{figure}
 
 Đối với pha xác minh, SQLMap chỉ cần xác minh là lỗ hổng có tồn tại hay không dựa trên thông tin cảnh báo đưa ra.
 \subsubsection{Commix và Tplmpa}
@@ -85,6 +98,14 @@ Khác với SQLMap, Commix và Tplmap không có một API Server, các tương 
 
 Đối với Docker Engine cũng cần có API giao tiếp gián tiếp để có thể thực thi và lấy được đầu vào chuẩn và đầu ra chuẩn của Container.
 
+
+Hình \ref{fig:commix_tplmap} Biểu đồ tương tác công cụ với Commix và Tplmap
+
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/DockerIO.drawio.png}
+	\caption{Biểu đồ tương tác công cụ với Commix và Tplmap.}
+	\label{fig:commix_tplmap}
+\end{figure}
 
 Đối với việc xác minh, Commix và Tplmap sẽ cố gắng thực thi một lệnh và kiểm tra lệnh có được thực thi hay không bằng kiểm tra đầu ra chuẩn để xác minh.
 
@@ -103,6 +124,14 @@ Theo luồng được cộng đồng ZAP định ra, thì cảnh bảo (Alert) l
 Từ đó em đã mô hình hóa lại thành Issue để xử lý hai vấn đề ở trên: chỉ sử dụng cảnh báo nhưng một nguồn và định thông tin tiêu chuẩn để báo cáo xử lý và cho phép xuất ra một bản báo cáo dạng rich text để cung cấp đủ thông tin về lỗ hổng.
 
 Báo cáo sinh ra cho phép sử dụng Issue không phải trạng thái UNKNOWN để tạo ra một File PDF chứa báo cáo với format định trước.
+Hình \ref{fig:report} Sinh báo cáo cho các lỗ hổng.
+
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/report.png}
+	\caption{Sinh báo cáo cho các lỗ hổng.}
+	\label{fig:report}
+\end{figure}
+
 \subsection{Các công cụ khai thác và hậu khai thác}
 
 Ngoài việc xác minh tự động trong đường ống, các công cụ thích hợp còn có thể sử dụng như một công cụ khai thác tự động trong ZAP. Việc thích hợp sử dụng chung các thành phần chính với công cụ xác minh tự động.
@@ -111,25 +140,56 @@ Ngoài việc xác minh tự động trong đường ống, các công cụ thí
 \subsubsection{SQLMap}
 Với lỗ hổng này, người dùng có thể khai thác từ một cách tự động bằng cách trích xuất các thông tin từ lỗ hổng.
 
+Hình \ref{fig:sqlmap_explot} Khai thác lỗ hổng SQL Injection thông qua SQLMap.
+
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/sqlmap_explot.png}
+	\caption{Khai thác lỗ hổng SQL Injection thông qua SQLMap}
+	\label{fig:sqlmap_explot}
+\end{figure}
 Dữ liệu đầu vào có thể gửi trực tiếp từ các cảnh báo tới, các dữ liệu như URL, Cookie, Data sẽ được gửi cùng sang để việc khai thác trở nên ngắn gọn hơn hoặc tự chỉnh sửa để dễ dàng xác nhận hơn.
 \subsubsection{Commix}
 
 Dữ liệu đầu vào cũng có thể gửi từ cảnh báo sang tương tự SQLMap.
+Hình \ref{fig:commix_exploit} Khai thác lỗ hổng OS Command Injection bằng Commix.
 
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/commix_exploit.png}
+	\caption{Khai thác lỗ hổng OS Command Injection bằng Commix	}
+	\label{fig:commix_exploit}
+\end{figure}
 Các câu lệnh sẽ được gửi tới Commix và nhận về output tương tự một trình pseudo-shell.
 \subsubsection{Tplmap}
 Tương tự SQLMap và Commix, Tplmap  câu lệnh khởi tạo có thể được gửi sang từ một cảnh báo.
+Hình \ref{fig:tplmap_exploit} Khai thác lỗ hổng SSTI bằng Tplmap.
 
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/tplmap_exploit.png}
+	\caption{Khai thác lỗ hổng SSTI bằng Tplmap}
+	\label{fig:tplmap_exploit}
+\end{figure}
 Các câu lệnh trong Tplmap cũng được cài đặt để nhận một đầu vào và một đầu ra nhưng một trình pseudo-shell.
 
 \subsubsection{Remote File Inclusion}
 
 Việc khai thác Remote File Inclusion PHP được em triển khai bằng cách thông qua một tập tin thực thi tự triển khai được công khai trên Internet. Trong đây sẽ có một số tham số cho phép mình thực thi lệnh, các đầu ra của lệnh sẽ được gửi về bằng cách phân tích phản hồi của yêu cầu.
+Hình \ref{fig:rfi_exploit} Khai thác lỗ hổng RFI bằng RFI Exploiter.
 
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/rfi_exploit.png}
+	\caption{Khai thác lỗ hổng RFI bằng RFI Exploiter}
+	\label{fig:rfi_exploit}
+\end{figure}
 \subsubsection{Local File Inclusion/Path Traversal}
 
-Trình khai thác lỗ hổng này được em triển khai bằng cách cho phép người dùng lựa chọn một số đường dẫn và thay đổi các đường dẫn để lấy dữ liệu về, người dùng có thể xem dữ liệu trả về thông qua việc quan sát phản hồi.
+Trình khai thác lỗ hổng Local File Inclusion/Path Traversal được em triển khai bằng cách cho phép người dùng lựa chọn một số đường dẫn và thay đổi các đường dẫn để lấy dữ liệu về, người dùng có thể xem dữ liệu trả về thông qua việc quan sát phản hồi.
+Hình \ref{fig:lfi_exploit} Khai thác LFI/Path Traversal bằng công cụ LFI Exploiter.
 
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/lfi_exploit.png}
+	\caption{Khai thác LFI/Path Traversal bằng công cụ LFI Exploiter}
+	\label{fig:lfi_exploit}
+\end{figure}
 \subsection{Đóng gói các thành phần}
 
 Ngoài việc cần có các Interface để giao tiếp với từng công cụ mã nguồn mở khác nhau thì cũng cần đóng gói các công cụ mở rộng vào thành một Addons hoàn chỉnh. Để giảm thiểu các cài đặt thêm để chạy được các công cụ mở rộng thì em lựa chọn Docker để đóng gói.
