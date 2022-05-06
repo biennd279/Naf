@@ -57,11 +57,14 @@
 
 \chapter*{Tóm tắt}
 
-Zed Attack Proxy (ZAP) là một công cụ mã nguồn mở giúp rà soát lỗ hổng tự động theo tập luật được phát triển liên tục bởi cộng đồng. Tuy nhiên, ZAP lại thiếu đi các công cụ xác minh và khai thác các lỗ hổng. Công cụ Naf được phát triển sẽ giúp bổ sung cho ZAP về việc xác minh và khai thác lỗ hổng phía máy chủ Web tự động.
+Zed Attack Proxy (ZAP) là một công cụ mã nguồn mở giúp rà soát lỗ hổng tự động theo tập luật được phát triển liên tục bởi cộng đồng. Tuy nhiên, ZAP lại thiếu đi các công cụ xác minh và khai thác các lỗ hổng. Công cụ Nextgen automation framework (Naf) được phát triển trong khuôn khổ của khóa luận này sẽ giúp bổ sung cho ZAP về việc xác minh và khai thác lỗ hổng phía máy chủ Web tự động.
 
-Hiện tại với công cụ, đã có thể xác minh được các lỗng hổng mức nguy hiểm như SQL Injection, Command Injection, Remengineote File Inclusion, Server Side Template Injection,... với độ chính xác cao, đảm bảo được tỉ lệ dương tính giả thấp, từ đó lược bỏ được phần lớn công đoạn xác minh lỗ hổng đối với các lỗ hổng nguy hiểm này. So với các công cụ thương mại trên thị trường như Invicti (trước đây là Netsparker) thì công đã bổ sung cho ZAP tính năng tương đương, với độ tin tưởng cao.
+Các công cụ khai thác sẵn có như Invicti, Acunetix,...cho phép xác minh một cách tự động các lỗ hổng Web nghiêm trọng như SQL Injection, Command Injection, Remote File Inclusion, Server Side Template Injection,... là thực sự tồn tại giúp công tác kiểm thử an ninh được thực hiện một cách hiệu quả hơn, giảm thiểu các thao tác thủ công phức tạp tiêu tốn nhiều thời gian.
 
-Công cụ có sử dụng các bộ công cụ mã nguồn mở phổ biến như SQLMap, Commix, TplMap,... làm engine để thực hiện quá trình xác minh, cung cấp thêm các công cụ khai thác tự động. Do đều là các công cụ mã nguồn mở được bảo trì liên tục nên có khả năng khai thác được miền rất rộng các lỗ hổng với kỹ thuật được cập nhật
+Công cụ Naf của chúng tôi thích hợp vào ZAP các bộ công cụ mã nguồn mở phổ biến như SQLMap, Commix, Tplmap,... biến ZAP trở thanh một công cụ vừa có chức năng dò quét vừa có chức năng xác minh tự động các lỗ hổng an ninh Web và cung cấp thêm các công cụ khai thác. Do đều là các công cụ mã nguồn mở được bảo trì liên tục nên có khả năng khai thác được miền rất rộng các lỗ hổng với kỹ thuật được cập nhật. Naf tốt hơn Invicti khi khai thác được lỗ hổng Server Side Template Injection nhưng một số lỗ hổng chưa phát hiện ngay trong quá trình rà quét.
+
+Naf tuy rằng chưa phát hiện và xác minh được số lượng nhiều như các công cụ còn lại nhưng có thể khai thác được một số lỗ hổng mà Invicti, Acunetix không khai thác được như Server Side Template Injection.
+% di  theo chieu huong tieu cuc -> tich cuc
 
 \chapter*{Lời cảm ơn}
 

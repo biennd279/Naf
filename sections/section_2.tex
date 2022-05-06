@@ -10,14 +10,24 @@ OWASP Zed Attack Proxy (thường được gọi tắt là  ZAP hay ZAProxy) là
 \subsection{ZAP Addons}
 Điểm đặc biệt của ZAP là cơ chế mở rộng bằng ZAP Addons cho phép cộng đồng xây dựng được các phần mở rộng riêng cho mình trên ZAP mà không cần sửa các phần liên quan đến lõi của ZAP, đảm bảo sự độc lập tránh sự conflict giữa các ZAP Addons hoặc ZAP Addons với chính ZAP, đồng thời cũng đảm bảo được các phần được bảo trị độc lập một cách liên tục.
 \subsubsection{Addon Spider và Addon Spider Ajax}
-Một trong các Addons Core, được phát triển để Crawl và phát hiện được các thành phần đơn trong Website như các URL, action,...được gọi là các Site Node. Site Node cung cấp sẽ thông tin cho người dùng về thông tin Website đồng thời cũng cung cấp các thông tin về Website cho các Addon khác thông qua các API của ZAP.
+Một trong các Addons chính, được phát triển để Crawl và phát hiện được các thành phần đơn trong Website như các URL, hành động,...được gọi là các Site Node. Site Node cung cấp sẽ thông tin cho người dùng về thông tin Website đồng thời cũng cung cấp các thông tin về Website cho các Addon khác thông qua các API của ZAP.
+
+Addon Spider sẽ crawl dựa trên cây DOM của Website, do đó addon này sẽ chỉ nhận được các thông tin từ web tĩnh. Để lấy được các thông tin trong việc chạy JavaScript thì cần có Addon Ajax Spider. Ajax spider sử dụng Selenium như một trình web để duyệt web ảo và thực hiện thu thập các thông tin này.
 \subsubsection{Addon Passive Scan và Active Scan}
 Một Addons Core, được sử dụng để chạy các kiểm thử dạng được lập trình sẵn thành các Plugin đặc biệt gọi là Rule. Các Rule sẽ dựa theo thông tin của hệ thống cung cấp để chạy các Test Case và phân tích kết quả dựa trên các hành vi của Website để đưa ra các cảnh báo (Alert) cho người dùng.
+
+Passive Scan sẽ chỉ sử dụng các phản hồi của proxy để lấy tông tin, thường các lỗ hổng liên quan đến lộ thông tin sẽ được phát hiện bằng trình quét này.
+
+Active Scan sẽ chủ động gửi các truy cấn để phát hiện ra lỗ hổng dựa vào các hành vi của Web trả lại. Nhược điểm của trình quét này sẽ gửi số lượng lớn và
+các truy vấn tới mọi Site Node của Website có thế dẫn đến các hành vi không mong muốn đối với Website mục tiêu.
 
 Các Rule liên tục được cộng đồng duy trì và phát triển theo các lỗ hổng đã xuất hiện và hiện hành.
 \subsection{SQL Map}
 SQLMap là Một công cụ mã nguồn mở được sử dụng để tự động quá trình xác định, khai thác và hậu khai thác các lỗ hổng về SQL Injection.
+
 SQLMap được cộng đồng phát triển với một engine có khả năng phát hiện các lỗ hổng ở một miền lỗ hổng cực kỳ rộng và cho rất nhiều hệ thống khác nhau. Đồng thời nó cũng có các công cụ khai thác dựa trên các lỗ hổng được phát hiện trên dump cơ sở dữ liệu hiệu quả.
+
+Hiện nay SQLMap, hỗ trợ gần như các cơ sở dữ liệu phổ biển như MySQL, Oracle, PostgreSQL, Microsoft SQL Server, Microsoft Access, IBM DB2, SQLite, Firebird, Sybase, SAP MaxDB, Informix, MariaDB, MemSQL, TiDB, CockroachDB, HSQLDB, H2,... với rất nhiều kỹ thuật như boolean-based blind, time-based blind, error-based, UNION query-based, stacked queries and out-of-band. Ngoài ra, SQLMap giúp liệt kê bằng các thông tin của cơ sở dữ liệu nếu users, password hashes, privileges, roles, databases, tables and columns.
 \subsection{Commix}
 Commix (viết tắt của command injection exploiter) là một công cụ mã nguồn mở được sử dụng để tự động xác định, khai thác và hậu khai thác các lỗ hổng về Command Injection. Một số lỗ hổng liên quan đến Remote Code Evaluation cũng có thể được phát hiện và khai thác bằng công cụ này.
 Commix cũng được cộng đồng phát triển để có khả năng khai thác một miền rộng các lỗ hổng trên nhiều hệ điều hành khác nhau và có thể thực hiện hậu khai thác ở đây.
