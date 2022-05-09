@@ -30,6 +30,12 @@
 \usepackage{multirow}
 \usepackage{tikz}
 \usepackage{pgfplots}
+\usepackage{listings,xcolor}
+
+\definecolor{dkgreen}{rgb}{0,.6,0}
+\definecolor{dkblue}{rgb}{0,0,.6}
+\definecolor{dkyellow}{cmyk}{0,0,.8,.3}
+
 \usetikzlibrary{calc}
 
 \let\orgautoref\autoref
@@ -48,6 +54,21 @@
 \setlist[description]{leftmargin=\parindent,labelindent=\parindent}
 
 \title{Phát triển một công cụ hỗ trợ phát hiện và khai thác tự động các lỗ hổng Web}
+
+\lstset{
+  language        = php,
+  basicstyle      = \small\ttfamily,
+  keywordstyle    = \color{dkblue},
+  stringstyle     = \color{red},
+  identifierstyle = \color{dkgreen},
+  commentstyle    = \color{gray},
+  emph            =[1]{php},
+  emphstyle       =[1]\color{black},
+  emph            =[2]{if,and,or,else},
+  emphstyle       =[2]\color{dkyellow},
+  breakatwhitespace =   false,
+  breaklines    = true
+  }
 
 \pagenumbering{roman}
 \begin{document}
@@ -76,8 +97,6 @@ lỗ hổng với kỹ thuật được cập nhật. Do còn phụ thuộc vào
 đồng và chưa có khả năng phát hiện được một số lỗ hổng khi rà quét nhưng AVA lại có khả năng xác
 minh và khai thác một số lỗ hổng nhiều hơn so với các công cụ thương mại như Invicti điển hình
 là lỗ hổng Server Side Template Injection.
-
-% di  theo chieu huong tieu cuc -> tich cuc
 
 \chapter*{Lời cảm ơn}
 
