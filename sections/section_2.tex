@@ -3,18 +3,23 @@
 
 \begin{document}
 \subsection{Zed Attack Proxy (ZAP)}
-OWASP Zed Attack Proxy (thường được gọi tắt là  ZAP hay ZAProxy) là công cụ mã nguồn mở, công cụ cho phép các các kỹ sư an toàn thông tin tìm kiếm được lỗ hổng một cách tự động/bán tự động/thủ công thông qua cơ chế “middle-in-the-middle-proxy” giúp người dùng đứng giữa ứng dụng Web để thực hiện kiểm thử qua các plugin trong được xây dựng trong cộng đồng.
+OWASP Zed Attack Proxy (thường được gọi tắt là  ZAP hay ZAProxy) là công cụ mã nguồn mở, công cụ cho phép các các kỹ sư an toàn thông tin tìm kiếm được lỗ hổng một cách tự động/bán
+tự động/thủ công thông qua cơ chế “middle-in-the-middle-proxy” giúp người dùng đứng giữa ứng dụng Web để thực hiện kiểm thử qua các plugin trong được xây dựng trong cộng đồng.
 
 Điểm mạnh của ZAP là ứng dụng được viết bằng Java nên có thể triển khai trên nhiều nền tảng và có cộng đồng phát triển thường xuyên cập nhập các tri thức liên quan đến lỗ hổng hiện hành.
 
 \subsection{ZAP Addons}
-Điểm đặc biệt của ZAP là cơ chế mở rộng bằng ZAP Addons cho phép cộng đồng xây dựng được các phần mở rộng riêng cho mình trên ZAP mà không cần sửa các phần liên quan đến lõi của ZAP, đảm bảo sự độc lập tránh sự conflict giữa các ZAP Addons hoặc ZAP Addons với chính ZAP, đồng thời cũng đảm bảo được các phần được bảo trị độc lập một cách liên tục.
+Điểm đặc biệt của ZAP là cơ chế mở rộng bằng ZAP Addons cho phép cộng đồng xây dựng được các phần mở rộng riêng cho mình trên ZAP mà không cần sửa các phần liên quan đến lõi của
+ZAP, đảm bảo sự độc lập tránh sự conflict giữa các ZAP Addons hoặc ZAP Addons với chính ZAP, đồng thời cũng đảm bảo được các phần được bảo trị độc lập một cách liên tục.
 \subsubsection{Addon Spider và Addon Spider Ajax}
-Một trong các Addons chính, được phát triển để Crawl và phát hiện được các thành phần đơn trong Website như các URL, hành động,...được gọi là các Site Node. Site Node cung cấp sẽ thông tin cho người dùng về thông tin Website đồng thời cũng cung cấp các thông tin về Website cho các Addon khác thông qua các API của ZAP.
+Một trong các Addons chính, được phát triển để Crawl và phát hiện được các thành phần đơn trong Website như các URL, hành động,...được gọi là các Site Node. Site Node cung cấp sẽ
+thông tin cho người dùng về thông tin Website đồng thời cũng cung cấp các thông tin về Website cho các Addon khác thông qua các API của ZAP.
 
-Addon Spider sẽ crawl dựa trên cây DOM của Website, do đó addon này sẽ chỉ nhận được các thông tin từ web tĩnh. Để lấy được các thông tin trong việc chạy JavaScript thì cần có Addon Ajax Spider. Ajax spider sử dụng Selenium như một trình web để duyệt web ảo và thực hiện thu thập các thông tin này.
+Addon Spider sẽ crawl dựa trên cây DOM của Website, do đó addon này sẽ chỉ nhận được các thông tin từ web tĩnh. Để lấy được các thông tin trong việc chạy JavaScript thì cần có
+Addon Ajax Spider. Ajax spider sử dụng Selenium như một trình web để duyệt web ảo và thực hiện thu thập các thông tin này.
 \subsubsection{Addon Passive Scan và Active Scan}
-Một Addons Core, được sử dụng để chạy các kiểm thử dạng được lập trình sẵn thành các Plugin đặc biệt gọi là Rule. Các Rule sẽ dựa theo thông tin của hệ thống cung cấp để chạy các Test Case và phân tích kết quả dựa trên các hành vi của Website để đưa ra các cảnh báo (Alert) cho người dùng.
+Một Addons Core, được sử dụng để chạy các kiểm thử dạng được lập trình sẵn thành các Plugin đặc biệt gọi là Rule. Các Rule sẽ dựa theo thông tin của hệ thống cung cấp để
+chạy các Test Case và phân tích kết quả dựa trên các hành vi của Website để đưa ra các cảnh báo (Alert) cho người dùng.
 
 Passive Scan sẽ chỉ sử dụng các phản hồi của proxy để lấy tông tin, thường các lỗ hổng liên quan đến lộ thông tin sẽ được phát hiện bằng trình quét này.
 

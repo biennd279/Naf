@@ -12,4 +12,6 @@ RUN tlmgr install placeins
 RUN tlmgr install biblatex biber glossaries
 RUN tlmgr install subfiles float xcolor wrapfig caption svg multirow
 RUN texhash
+RUN sudo apt update && \\
+    sudo apt install texlive-latex-extra biber texlive-lang-other texlive-extra-utils
 USER ${USERNAME}

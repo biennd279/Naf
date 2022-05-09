@@ -57,28 +57,50 @@
 
 \chapter*{Tóm tắt}
 
-Zed Attack Proxy (ZAP) là một công cụ mã nguồn mở giúp rà soát lỗ hổng tự động theo tập luật được phát triển liên tục bởi cộng đồng. Tuy nhiên, ZAP lại thiếu đi các công cụ xác minh và khai thác các lỗ hổng. Công cụ Nextgen automation framework (Naf) được phát triển trong khuôn khổ của khóa luận này sẽ giúp bổ sung cho ZAP về việc xác minh và khai thác lỗ hổng phía máy chủ Web tự động.
+Zed Attack Proxy (ZAP) là một công cụ mã nguồn mở giúp rà soát lỗ hổng tự động theo tập luật
+được phát triển liên tục bởi cộng đồng. Tuy nhiên, ZAP lại thiếu đi các công cụ xác minh và
+khai thác các lỗ hổng. Công cụ Automation Validate and Attack (AVA) được phát triển trong
+khuôn khổ của khóa luận này sẽ giúp bổ sung cho ZAP về việc xác minh và khai thác lỗ hổng
+phía máy chủ Web tự động.
 
-Các công cụ khai thác sẵn có như Invicti, Acunetix,...cho phép xác minh một cách tự động các lỗ hổng Web nghiêm trọng như SQL Injection, Command Injection, Remote File Inclusion, Server Side Template Injection,... là thực sự tồn tại giúp công tác kiểm thử an ninh được thực hiện một cách hiệu quả hơn, giảm thiểu các thao tác thủ công phức tạp tiêu tốn nhiều thời gian.
+Các công cụ khai thác sẵn có như Invicti, Acunetix,...cho phép xác minh một cách tự động các
+lỗ hổng Web nghiêm trọng như SQL Injection, Command Injection, Remote File Inclusion,
+Server Side Template Injection,... là thực sự tồn tại giúp công tác kiểm thử an ninh được thực
+hiện một cách hiệu quả hơn, giảm thiểu các thao tác thủ công phức tạp tiêu tốn nhiều thời gian.
 
-Công cụ Naf của chúng tôi tích hợp vào ZAP các bộ công cụ mã nguồn mở phổ biến như SQLMap, Commix, Tplmap,... biến ZAP trở thanh một công cụ vừa có chức năng dò quét vừa có chức năng xác minh tự động các lỗ hổng an ninh Web và cung cấp thêm các công cụ khai thác. Do đều là các công cụ mã nguồn mở được bảo trì liên tục nên có khả năng khai thác được miền rất rộng các lỗ hổng với kỹ thuật được cập nhật. Naf tốt hơn Invicti khi khai thác được lỗ hổng Server Side Template Injection nhưng một số lỗ hổng chưa phát hiện ngay trong quá trình rà quét.
+Công cụ AVA của chúng tôi tích hợp vào ZAP các bộ công cụ mã nguồn mở phổ biến như SQLMap,
+Commix, Tplmap,... biến ZAP trở thanh một công cụ vừa có chức năng dò quét vừa có chức năng
+xác minh tự động các lỗ hổng an ninh Web và cung cấp thêm các công cụ khai thác. Do đều là các
+công cụ mã nguồn mở được bảo trì liên tục nên có khả năng khai thác được miền rất rộng các
+lỗ hổng với kỹ thuật được cập nhật. Do còn phụ thuộc vào các tập luật được phát triển bởi cộng
+đồng và chưa có khả năng phát hiện được một số lỗ hổng khi rà quét nhưng AVA lại có khả năng xác
+minh và khai thác một số lỗ hổng nhiều hơn so với các công cụ thương mại như Invicti điển hình
+là lỗ hổng Server Side Template Injection.
 
-Naf tuy rằng chưa phát hiện và xác minh được số lượng nhiều như các công cụ còn lại nhưng có thể khai thác được một số lỗ hổng mà Invicti, Acunetix không khai thác được như Server Side Template Injection.
 % di  theo chieu huong tieu cuc -> tich cuc
 
 \chapter*{Lời cảm ơn}
 
-Lời đầu tiên cho phép em được gửi lời cảm ơn tới Khoa Công Nghệ Thông Tin – Trường Đại học Công Nghệ ĐHQG Hà Nội đã tạo điều kiện thuận lợi cho em được học tập, nghiên cứu và thực hiện đề tài tốt nghiệp này.
+Lời đầu tiên cho phép em được gửi lời cảm ơn tới Khoa Công Nghệ Thông Tin – Trường Đại học Công
+Nghệ ĐHQG Hà Nội đã tạo điều kiện thuận lợi cho em được học tập, nghiên cứu và thực hiện
+đề tài tốt nghiệp này.
 
-Em cũng xin được bày tỏ lòng biết ơn sâu sắc tới thầy Nguyễn Đại Thọ đã tận tình hướng dẫn, đóng góp những ý kiến giúp em hoàn thành khóa luận tốt nghiệp một cách tốt nhất.
+Em cũng xin được bày tỏ lòng biết ơn sâu sắc tới thầy Nguyễn Đại Thọ đã tận tình hướng dẫn,
+đóng góp những ý kiến giúp em hoàn thành khóa luận tốt nghiệp một cách tốt nhất.
 
-Em cũng vô cùng biết ơn các thầy cô trong trường tận tình giảng dạy, truyền thụ cho em những kiến thức và kỹ năng quan trọng làm hành trang vững chắc trên con đường học vấn của bản thân.
+Em cũng vô cùng biết ơn các thầy cô trong trường tận tình giảng dạy, truyền thụ cho
+em những kiến thức và kỹ năng quan trọng làm hành trang vững chắc trên con đường học vấn
+của bản thân.
 
 Chúc mọi người luôn luôn mạnh khoẻ và gặt hái được nhiều thành công trong cuộc sống.
 
 \chapter*{Lời cam đoan}
 
-Em xin cam đoan rằng khóa luận tốt nghiệp này không sao chép từ bất kỳ ai, tổ chức nào khác. Toàn bộ nội dung được trình bày trong tài liệu đều là cá nhân em qua quá trình học tập, tìm hiểu và nghiên cứu mà hoàn thiện. Mọi tài liệu tham khảo đều được ghi chép lại và trích dẫn hợp pháp. Nếu lời cam đoan là sai sự thật thì em xin chịu mọi trách nhiệm và hình thức kỷ luật theo quy định từ phía nhà trường.
+Em xin cam đoan rằng khóa luận tốt nghiệp này không sao chép từ bất kỳ ai,
+tổ chức nào khác. Toàn bộ nội dung được trình bày trong tài liệu đều là cá nhân em qua quá
+trình học tập, tìm hiểu và nghiên cứu mà hoàn thiện. Mọi tài liệu tham khảo đều được ghi chép
+lại và trích dẫn hợp pháp. Nếu lời cam đoan là sai sự thật thì em xin chịu mọi trách nhiệm và
+hình thức kỷ luật theo quy định từ phía nhà trường.
 
 \tableofcontents{}
 \clearpage{}

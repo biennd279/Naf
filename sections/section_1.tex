@@ -3,10 +3,13 @@
 
 \begin{document}
 Đối với các lỗ hổng ở hệ thống, việc đảm bảo an ninh sẽ được phụ thuộc vào nhà cung cấp sản phẩm, dịch vụ sử dụng trong hệ thống.
-Các lỗ hổng này thường chỉ được công khai sau khi đã có các bản vá và thường thời gian vá lỗ hổng nhanh, do đó các hệ thống sẽ an toàn khi được cập nhật liên tục. Trái lại với đó, các ứng dụng Web thường chỉ được vá bởi nhà phát triển - là các đơn vị nhỏ và vừa, ít có khả năng vá được các lỗ hổng trong thời gian ngắn.
+Các lỗ hổng này thường chỉ được công khai sau khi đã có các bản vá và thường thời gian vá lỗ hổng nhanh, do đó các hệ thống sẽ an toàn khi được cập nhật liên tục.
+Trái lại với đó, các ứng dụng Web thường chỉ được vá bởi nhà phát triển - là các đơn vị nhỏ và vừa, ít có khả năng vá được các lỗ hổng trong thời gian ngắn.
 
 Trong năm 2021, riêng nền tảng HackerOne đã nhận được hơn 66.000 lỗ hổng được báo cáo tới các đơn vị triển khai trên nền tảng.
-Chính vì do thường là các sản phẩm được tự phát triển, các khía cạnh an ninh sẽ được xem xét ở pha cuối cùng và thường chỉ đợt kiểm tra trong các đợt kiểm thử xâm nhập, do đó các lỗ hổng tồn tại sẽ nằm trong mã nguồn sản phẩm chứ không phải của hệ thống. Một số báo cáo năm 2019 chỉ ra rằng khoảng 82\% lỗ hổng nằm trong mã nguồn và hầu hết các trang web đều có lỗ hổng mức nghiêm trọng.
+Chính vì do thường là các sản phẩm được tự phát triển, các khía cạnh an ninh sẽ được xem xét ở pha cuối cùng và thường chỉ đợt kiểm tra trong các đợt kiểm thử xâm nhập,
+do đó các lỗ hổng tồn tại sẽ nằm trong mã nguồn sản phẩm chứ không phải của hệ thống. Một số báo cáo năm 2019 chỉ ra rằng khoảng 82\% lỗ hổng nằm trong mã nguồn và hầu hết
+các trang web đều có lỗ hổng mức nghiêm trọng.
 
 Với một cuộc kiểm thử xâm nhập, một quy trình đặc trưng có thể có các bước sau đây
 \begin{description}
@@ -17,11 +20,16 @@ Với một cuộc kiểm thử xâm nhập, một quy trình đặc trưng có 
 	\item [Khai thác và hậu khai thác] đối với một số cuộc tấn công sẽ có yêu cầu khai thác và hậu khai thác lỗ hổng để chỉ ra ảnh hưởng trong trường hợp bị tấn công.
 	\item [Duyệt và báo cáo] tổng hợp lỗ hổng, đảm bảo chất lượng của báo cáo và gửi lại báo cáo cho đơn vị.
 \end{description}
-Trong đó, các bước như thu thập thông tin, khảo sát, khám phá và rà quét hiện nay đã được tự động hóa phần lớn bằng các công cụ tự động. Tuy nhiên, để các lỗ hổng được đánh giá là có tồn tại hay không thì cần được xác minh lại bằng phương pháp thủ công, làm tốn lượng lớn thời gian. Tuy nhiên, với một số lỗ hổng nghiêm trọng có thể chỉ ra ngay được tính đúng đắn của lỗ hổng và tác động của nó tới hệ thống như SQL Injection, Command Injection,...
+Trong đó, các bước như thu thập thông tin, khảo sát, khám phá và rà quét hiện nay đã được tự động hóa phần lớn bằng các công cụ tự động. Tuy nhiên, để các lỗ hổng được đánh giá
+là có tồn tại hay không thì cần được xác minh lại bằng phương pháp thủ công, làm tốn lượng lớn thời gian. Tuy nhiên, với một số lỗ hổng nghiêm trọng có thể chỉ ra ngay được tính đúng
+đắn của lỗ hổng và tác động của nó tới hệ thống như SQL Injection, Command Injection,...
 
-Do đó, nếu có thể tích hợp các công cụ này vào trong quá trình kiểm thử xâm nhập sẽ giúp giảm được thời gian xác minh các lỗ hổng này, đưa ra được tác động của nó. Nắm được điều này hiện tại, trên thị trường đã có các công cụ tự động sử dụng cơ chế Proof-of-Exploit để đưa ra các báo cáo có độ dương tính giả thấp, điển hình là Invicti (Netsparker).
+Do đó, nếu có thể tích hợp các công cụ này vào trong quá trình kiểm thử xâm nhập sẽ giúp giảm được thời gian xác minh các lỗ hổng này, đưa ra được tác động của nó. Nắm được điều
+này hiện tại, trên thị trường đã có các công cụ tự động sử dụng cơ chế Proof-of-Exploit để đưa ra các báo cáo có độ dương tính giả thấp, điển hình là Invicti (Netsparker).
 
-Open Web Application Security Project (OWASP) là một tổ chức phi lợi nhuận quốc tế chuyên về bảo mật ứng dụng web. OWASP thường đưa ra các khuyến cáo cho từng loại lỗ hổng về độ nguy hiểm và cách phòng, chống trong thực tế. OWASP Top 10 là báo cáo, đánh giá các loại lỗ hổng theo danh mục, được xếp hạng theo độ quan trọng nhất được cập nhật thường xuyên bởi một nhóm chuyên gia đến từ nhiều quốc gia, tổ chức trên toàn cầu. OWASP Top 10 thường được sử dụng làm tiêu chuẩn cho việc đánh giá an toàn thông tin ở nhiều tổ chức.
+Open Web Application Security Project (OWASP) là một tổ chức phi lợi nhuận quốc tế chuyên về bảo mật ứng dụng web. OWASP thường đưa ra các khuyến cáo cho từng loại lỗ hổng về
+độ nguy hiểm và cách phòng, chống trong thực tế. OWASP Top 10 là báo cáo, đánh giá các loại lỗ hổng theo danh mục, được xếp hạng theo độ quan trọng nhất được cập nhật thường xuyên
+bởi một nhóm chuyên gia đến từ nhiều quốc gia, tổ chức trên toàn cầu. OWASP Top 10 thường được sử dụng làm tiêu chuẩn cho việc đánh giá an toàn thông tin ở nhiều tổ chức.
 
 Năm 2021, OWASP tiếp tục được cập nhật thêm so với lần cuối cùng là năm 2017. Báo cáo được liệt kê với 10 danh mục sau
 \begin{enumerate}
