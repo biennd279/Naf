@@ -3,10 +3,36 @@
 
 \begin{document}
 \subsection{Zed Attack Proxy (ZAP)}
-OWASP Zed Attack Proxy (thường được gọi tắt là  ZAP hay ZAProxy) là công cụ mã nguồn mở, công cụ cho phép các các kỹ sư an toàn thông tin tìm kiếm được lỗ hổng một cách tự động/bán
-tự động/thủ công thông qua cơ chế “middle-in-the-middle-proxy” giúp người dùng đứng giữa ứng dụng Web để thực hiện kiểm thử qua các plugin trong được xây dựng trong cộng đồng.
+OWASP Zed Attack Proxy (thường được gọi là  ZAP hay ZAProxy) là công cụ mã nguồn mở,
+công cụ cho phép các các kỹ sư an toàn thông tin tìm kiếm được lỗ hổng một cách tự
+động/bán tự động/thủ công thông qua cơ chế “middle-in-the-middle-proxy” giúp người
+dùng đứng giữa ứng dụng Web để thực hiện kiểm thử qua các plugin trong được xây dựng
+trong cộng đồng.
 
-Điểm mạnh của ZAP là ứng dụng được viết bằng Java nên có thể triển khai trên nhiều nền tảng và có cộng đồng phát triển thường xuyên cập nhập các tri thức liên quan đến lỗ hổng hiện hành.
+Điểm mạnh của ZAP là ứng dụng được viết bằng Java nên có thể triển khai trên
+nhiều nền tảng và có cộng đồng phát triển thường xuyên cập nhập các tri thức
+liên quan đến lỗ hổng hiện hành.
+
+\subsubsection{ZAP Core}
+
+ZAP Core là thành phần lõi cung cấp toàn bộ API giao tiếp với bên ngoài cho các
+plugin (bao gồm các luật, Addon) trong ZAP. Các plugin sẽ không trực tiếp giao tiếp
+với môi trường bên ngoài mà sẽ sử dụng các API này để  gửi và nhận yêu cầu, đọc ghi
+dữ liệu, ghi cơ sở dữ liệu\ldots Thành phần chính ZAP Core được phát triển từ dự án
+Paros Proxy - là một Interceptor Proxy thường được sử dụng để để thử các ca kiểm thử
+xâm nhập.
+
+Các thành phần đáng kể nhất của ZAP Core phải kể đến là: Proxy, HttpSender, Session,
+Site Map, Scanner, Context và các Addon Core. Proxy chính là interceptor được kế thừa
+từ Praos, cho phép nhặn gửi-nhận các yêu cầu, phản hồi tới và đi qua Proxy. Thông
+thường, các trình duyệt sẽ sử dụng thông qua proxy này để thực hiện kiểm thử. Http
+Sender sẽ quản lý việc gửi và nhận của các thông báo HTTP. Session và Site Map sẽ quản lý
+lượng đầu ra và đầu vào các thông báo HTTP, để xây dựng thành một cây thông tin cung
+cấp các thành phần khác. Scanner cung cấp một khung để các luật thực hiện xác định
+lỗ hổng trên các thông báo HTTP. Context cung cấp ngữ cảnh cho việc rà quét, xác định
+lỗ hộng theo người dùng.
+
+\subsubsection{ZAP Context}
 
 \subsection{ZAP Addons}
 Điểm đặc biệt của ZAP là cơ chế mở rộng bằng ZAP Addons cho phép cộng đồng xây dựng được các phần mở rộng riêng cho mình trên ZAP mà không cần sửa các phần liên quan đến lõi của
@@ -27,21 +53,23 @@ Active Scan sẽ chủ động gửi các truy cấn để phát hiện ra lỗ 
 các truy vấn tới mọi Site Node của Website có thế dẫn đến các hành vi không mong muốn đối với Website mục tiêu.
 
 Các Rule liên tục được cộng đồng duy trì và phát triển theo các lỗ hổng đã xuất hiện và hiện hành.
-\subsection{SQL Map}
+
+\subsection{Lỗ hổng ứng dụng Web}
+
+\subsubsection{}
+
+\subsection{Công cụ SQL Map}
 SQLMap là Một công cụ mã nguồn mở được sử dụng để tự động quá trình xác định, khai thác và hậu khai thác các lỗ hổng về SQL Injection.
 
 SQLMap được cộng đồng phát triển với một engine có khả năng phát hiện các lỗ hổng ở một miền lỗ hổng cực kỳ rộng và cho rất nhiều hệ thống khác nhau. Đồng thời nó cũng có các công cụ khai thác dựa trên các lỗ hổng được phát hiện trên dump cơ sở dữ liệu hiệu quả.
 
 Hiện nay SQLMap, hỗ trợ gần như các cơ sở dữ liệu phổ biển như MySQL, Oracle, PostgreSQL, Microsoft SQL Server, Microsoft Access, IBM DB2, SQLite, Firebird, Sybase, SAP MaxDB, Informix, MariaDB, MemSQL, TiDB, CockroachDB, HSQLDB, H2,... với rất nhiều kỹ thuật như boolean-based blind, time-based blind, error-based, UNION query-based, stacked queries and out-of-band. Ngoài ra, SQLMap giúp liệt kê bằng các thông tin của cơ sở dữ liệu nếu users, password hashes, privileges, roles, databases, tables and columns.
-\subsection{Commix}
+\subsection{Công cụ Commix}
 Commix (viết tắt của command injection exploiter) là một công cụ mã nguồn mở được sử dụng để tự động xác định, khai thác và hậu khai thác các lỗ hổng về Command Injection. Một số lỗ hổng liên quan đến Remote Code Evaluation cũng có thể được phát hiện và khai thác bằng công cụ này.
 Commix cũng được cộng đồng phát triển để có khả năng khai thác một miền rộng các lỗ hổng trên nhiều hệ điều hành khác nhau và có thể thực hiện hậu khai thác ở đây.
-\subsection{Tplmap}
+\subsection{Công cụ Tplmap}
 Tplmap là một công cụ mã nguồn mở được sử dụng để xác minh và khai thác các lỗ hổng liên quan đến Code Injection and Server-Side Template Injection.
 Hơn 15 ngôn ngữ, template engine có thể bị khai thác với nhiều kỹ thuật khác nhau kể các các lỗ hổng dạng mù.
 
-\subsection{Kotlin}
-
-Kotlin là ngôn ngữ lập trình được phát triển trên JetBrains, chạy trên nền tảng JVM. Nhờ vậy, Kotlin có thể chạy trên bất kỳ nền tảng nào, khi nó được biên dịch và chạy thông qua máy ảo. Kotlin đem lại nhiều cải thiện so với Java như coroutine, null-safety, \ldots{}. Do vậy, Kotlin thường được sử dụng để thay thế Java cho các ứng dụng hiệu năng cao.
 
 \end{document}
