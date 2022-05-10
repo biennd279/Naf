@@ -32,7 +32,8 @@ cụ tự động xác minh và khai thác tự động.
 \subsection{Các component}
 Các thành phần sẽ được mô hình hóa thành các Component. Mỗi Component
 sẽ phụ trách một Logic riêng theo từng phần của công cụ. Các Component
-này phụ thuộc nhau dạng cây.
+này phụ thuộc nhau dạng cây như hình \ref{fig:component} và được tổ chức
+mã nguồn như hình \ref{fig:package}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/component.png}
@@ -91,7 +92,7 @@ Các tương tác này được xử lý như sau
 	      vào truy vấn tới URL mục tiêu, cung cấp cho hệ thống thêm thông tin
 	      về Site Node gốc, đánh dấu điểm bắt đầu của Sitemap.
 	\item Thông tin về các ca kiểm thử được sử dụng. Thông tin được
-	      đánh dấu dưới dạng Chính sách (Policy)
+	      đánh dấu dưới dạng Chính sách (Policy) \ref{fig:policy}
 	      \begin{itemize}
 		      \item Về công nghệ sử dụng: Được cung cấp qua tập công
 		            nghệ sử dụng (Tech Set) trong ZAP Context, Scanner sẽ
@@ -112,7 +113,7 @@ Các tương tác này được xử lý như sau
 		      \label{fig:policy}
 	      \end{figure}
 	\item Thông tin về xác thực: Cần được thực hiện một lần đăng nhập
-	      để lấy thông tin để cung cấp đầy đủ thông tin cho ZAP Context.
+	      để lấy thông tin để cung cấp đầy đủ thông tin cho ZAP Context \ref{fig:authen}.
 	      ZAP Context sẽ “hướng dẫn” Crawler, Scanner thực hiện đăng nhập khi
 	      bị đăng xuất. Các thông tin cần được cung cấp bao gồm:
 	      \begin{itemize}
@@ -151,7 +152,7 @@ cơ sở sử dụng thư viện DirBuster có hiệu quả khá cao trong việ
 cũng như cung cấp một vài danh sách các từ phổ biến cho việc kiểm thử mờ.
 Đoạn của đường ống này sẽ sử dụng Addon trên và cung cấp danh sách các từ
 (người dùng lựa chọn) để thực hiện việc kiểm thử này. Việc này cũng được
-thiết đặt tự động trong trình Wizard thay vì phải thiết lập thủ công.
+thiết đặt tự động trong trình Wizard thay vì phải thiết lập thủ công \ref{fig:fuzz}.
 
 Đây là một trong đoạn đầu tiên của đường ống, nên chưa có nhiều thông tin
 về ngữ cảnh được cung cấp, nên chỉ cần dựa trên danh sách các từ được người
@@ -214,7 +215,7 @@ Việc cài đặt bước này cần đem được các thông tin từ pha tr�
 với thông tin người dùng cung cấp để thực hiện. Các Addons tương đối độc
 lập nên thông tin đầu ra của từng Addons là khác nhau và không ổn định,
 các thông tin đầu ra được thu thập, chuẩn hóa và đưa lại vào trong AVA
-để trực quan hóa thông tin.
+để trực quan hóa thông tin \ref{fig:scan_result}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/scan_result.png}
@@ -280,7 +281,7 @@ lập qua công API Server này. API Server sử dụng là REST-API sử dụng
 là format để truyền tải thông tin. Tuy nhiên dữ liệu trả về không là có
 định dạng chuẩn do SQLMap được xây dựng bằng Python là một ngôn ngữ kiểu
 động. Do đó, cần xây dựng thêm một số Parser riêng để có thế đưa dữ liệu
-trả về đúng kiểu.
+trả về đúng kiểu \ref{fig:sqlmap}.
 
 Lúc này các nhiệm vụ khai thác được mô hình hóa thành các Job, API Server
 sẽ xử lý các Job trong Job Pool và trả về dữ liệu theo các yêu cầu của công
@@ -299,7 +300,7 @@ hay không dựa trên thông tin cảnh báo đưa ra.
 \subsubsection{Commix và Tplmpa}
 Khác với SQLMap, Commix và Tplmap không có một API Server, các tương
 tác cần được đưa vào và ra thông qua đầu vào chuẩn (STDIN) và đầu ra
-chuẩn(STDOUT).
+chuẩn(STDOUT) \ref{fig:commix_tplmap}.
 
 Đối với Docker Engine cũng cần có API giao tiếp gián tiếp để có thể thực
 thi và lấy được đầu vào chuẩn và đầu ra chuẩn của Container.
@@ -330,20 +331,20 @@ mở để khai thác nên em cũng tự triển khai một trình khai thác ri
 Dù là các ZAP Addons cung cấp khá đầy đủ các thông tin về thông tin của
 chính Addons đó cho người dùng nhưng chính sự độc lập của các Addons lại
 khiến thông tin của toàn bộ ứng dụng ZAP nói chung lại bị phân tán thành
-tại các vị trí khác nhau. Đồng thời các Addons lại chia sẻ rất ít thông
-tin cho các Addons khác.
+tại các vị trí khác nhau. Đồng thời Addon lại chia sẻ rất ít thông
+tin cho các Addon khác.
 
 Điều này làm nảy sinh một nhiệm vụ cần được xây dựng là tập hóa các thông
 tin về quá trình kiểm thử, thông tin thu thập được thành một trang có sức
 trực quan hóa cao để hiệu quả trong việc theo dõi.
 
 Kiến trúc Event Bus của ZAP Core và các thông tin được cung cấp thêm trực
-tiếp các Addons khác và các thành phần được thêm vào. Cần thu thập thông
+tiếp các Addon khác và các thành phần được thêm vào. Cần thu thập thông
 tin lượng vừa đủ và chuẩn hóa các thông tin thu thập được thành một miền
 cố định để có thể trực quan hóa. Như đã nói ở trên, Addons rất ít chia sẻ
 thông tin ra ngoài nên lượng thông tin em cần thực hiện qua một số kĩ
 thuật khác với luồng hoạt động thông thường của ZAP để có thể tổng hợp
-được nhiều và đầy đủ hơn lượng thông tin.
+được nhiều và đầy đủ hơn lượng thông tin \ref{fig:state}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/state.png}
@@ -365,7 +366,7 @@ xử lý được các lỗ hổng tồn tại.
 Từ đó em đã mô hình hóa lại thành Vấn đề (Issue) để xử lý hai vấn đề ở trên:
 chỉ sử dụng cảnh báo nhưng một nguồn và định thông tin tiêu chuẩn để
 báo cáo xử lý và cho phép xuất ra một bản báo cáo dạng rich text để cung
-cấp đủ thông tin về lỗ hổng.
+cấp đủ thông tin về lỗ hổng \ref{fig:alert}.
 
 Các cảnh báo có thể gửi tới các tab khai thác.
 
@@ -376,7 +377,7 @@ Các cảnh báo có thể gửi tới các tab khai thác.
 \end{figure}
 
 Báo cáo sinh ra cho phép sử dụng Issue không phải trạng thái
-UNKNOWN để tạo ra một File PDF chứa báo cáo với format định trước.
+UNKNOWN để tạo ra một File PDF chứa báo cáo với format định trước \ref{fig:report}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/report.png}
@@ -397,7 +398,7 @@ Tuy nhiên, đặc điểm chung là các nhãn này sẽ không bao giờ đư�
 khi hết phiên để tránh lộ thông tin do các vấn đề về an toàn.
 \subsubsection{SQLMap}
 Với lỗ hổng này, người dùng có thể khai thác từ một cách tự động
-bằng cách trích xuất các thông tin từ lỗ hổng.
+bằng cách trích xuất các thông tin từ lỗ hổng \ref{fig:sqlmap_explot}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/sqlmap_explot.png}
@@ -411,31 +412,32 @@ trở nên ngắn gọn hơn hoặc tự chỉnh sửa để dễ dàng xác nh�
 
 Dữ liệu đầu vào cũng có thể gửi từ cảnh báo sang tương tự SQLMap.
 
+Các câu lệnh sẽ được gửi tới Commix và nhận về output tương tự một
+trình pseudo-shell \ref{fig:commix_exploit}.
+
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/commix_exploit.png}
 	\caption{Khai thác lỗ hổng OS Command Injection bằng Commix	}
 	\label{fig:commix_exploit}
 \end{figure}
-Các câu lệnh sẽ được gửi tới Commix và nhận về output tương tự một
-trình pseudo-shell.
 \subsubsection{Tplmap}
 Tương tự SQLMap và Commix, Tplmap  câu lệnh khởi tạo có thể được gửi
 sang từ một cảnh báo.
+Các câu lệnh trong Tplmap cũng được cài đặt để nhận một đầu vào và
+một đầu ra nhưng một trình pseudo-shell \ref{fig:tplmap_exploit}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/tplmap_exploit.png}
 	\caption{Khai thác lỗ hổng SSTI bằng Tplmap}
 	\label{fig:tplmap_exploit}
 \end{figure}
-Các câu lệnh trong Tplmap cũng được cài đặt để nhận một đầu vào và
-một đầu ra nhưng một trình pseudo-shell.
 
 \subsubsection{Remote File Inclusion}
 
 Việc khai thác Remote File Inclusion PHP được em triển khai bằng cách
 thông qua một tập tin thực thi tự triển khai được công khai trên Internet.
 Trong đây sẽ có một số tham số cho phép mình thực thi lệnh, các đầu ra
-của lệnh sẽ được gửi về bằng cách phân tích phản hồi của yêu cầu.
+của lệnh sẽ được gửi về bằng cách phân tích phản hồi của yêu cầu \ref{fig:rfi_exploit}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/rfi_exploit.png}
@@ -447,7 +449,7 @@ của lệnh sẽ được gửi về bằng cách phân tích phản hồi củ
 Trình khai thác lỗ hổng Local File Inclusion/Path Traversal được
 em triển khai bằng cách cho phép người dùng lựa chọn một số đường
 dẫn và thay đổi các đường dẫn để lấy dữ liệu về, người dùng có thể
-xem dữ liệu trả về thông qua việc quan sát phản hồi.
+xem dữ liệu trả về thông qua việc quan sát phản hồi \ref{fig:lfi_exploit}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/lfi_exploit.png}
@@ -472,7 +474,7 @@ Docker có cung cấp Interface để giao tiếp với Docker Daemon thông qua
 REST-API. Java và Kotlin không được hỗ trợ chính thức các thư viện để
 giao tiếp nhưng cộng đồng có các thư viện để giao tiếp tuy nhiên đã cũ
 và có rất ít tài liệu hướng dẫn nên cần bọc lại cung cấp một API hoàn
-chỉnh hơn cho các Component sử dụng.
+chỉnh hơn cho các Component sử dụng \ref{fig:doc}.
 
 Các API này bao gồm
 \begin{itemize}
