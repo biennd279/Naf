@@ -203,7 +203,8 @@ tự động do chỉ rà quét các thông tin bằng cách rà quét thụ đ�
 là công cụ hiệu quả cho việc chạy các luật được đưa ra của chính sách trong
 ngữ cảnh của ZAP. Chính công cụ này sẽ thực hiện việc thử các luật, loại bỏ
 bớt các luật dựa trên các tập công nghệ được đưa vào, lựa chọn các ca kiểm
-thử phù hợp với ngưỡng quét và đưa ra cảnh báo dựa trên mức độ cảnh bảo.
+thử phù hợp với ngưỡng quét và đưa ra cảnh báo dựa trên mức độ cảnh bảo. Ngoài ra,
+cần thích hợp thêm công cụ để phát hiện được các lỗ hổng phức tạp hơn.
 
 Đoạn của đường ống hoạt động này dựa trên chính sách đã được cung cấp để đưa ra
 cảnh báo. Quá trình này cũng cần được cung cấp ZAP Context để có thể thực
@@ -222,6 +223,22 @@ các thông tin đầu ra được thu thập, chuẩn hóa và đưa lại vào
 	\caption{Kết quả crawl}
 	\label{fig:scan_result}
 \end{figure}
+
+\subsubsection{Rà quét lỗ hổng của thành phần bên thứ ba}
+
+Đối với các thành phần thứ ba như thư viện, khung phát triển hay các máy chủ Web,
+thì việc sử dụng các thành phần cũ có thể khiến ứng dụng Web có thể bị khai thác
+dù rằng mã nguồn đã an toàn. Việc phát hiện các lỗ hổng này cũng không thế  phát
+hiện qua các công cụ rò quét thông thường. Nuclei là một công cụ rà quét lỗ hổng
+cho các trường hợp phức tạp và thường được các kĩ sư an toàn thông tin sử dụng cho
+trường hợp này.
+
+Để thích hợp được Nuclei vào công cụ, cần xây dựng một API giao tiếp với Nuclei. Do
+được xây dựng từ ngôn ngữ Go nên Nuclei là một tập tin khởi chạy nhị phân và cần bắt
+lấy đầu và chuẩn và đầu ra chuẩn để lấy được dữ liệu. Dữ liệu đầu vào cũng cần được
+chuẩn hóa từ dạng JSON vào trong hệ thống, đưa thành các cảnh báo đã được xác minh.
+Mô hình xử lý có thể biểu diễn như sau:
+% ảnh
 
 \subsection{Thích hợp công cụ xác minh tự động}
 
