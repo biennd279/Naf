@@ -3,16 +3,16 @@
 
 \begin{document}
 
-Bài kiểm thử sẽ được đánh giá thành hai bài kiểm thử
-\begin{enumerate}
-	\item Bài kiểm thử tự phát triển được em tự triển khai với mục đích đánh
-	      giá các chức năng được phát triển có thể xác minh và khai các lỗ hổng
-	      đã được phát triển hay không.
-	\item Bài kiểm thử thực tế thứ hai đánh giá trên môi trường là dự án
-	      DVWA được OWASP phát triển cho mục đích học tập về an ninh ứng dụng Web.
-\end{enumerate}
+% Bài kiểm thử sẽ được đánh giá thành hai bài kiểm thử
+% \begin{enumerate}
+% 	\item Bài kiểm thử tự phát triển được em tự triển khai với mục đích đánh
+% 	      giá các chức năng được phát triển có thể xác minh và khai các lỗ hổng
+% 	      đã được phát triển hay không.
+% 	\item Bài kiểm thử thực tế thứ hai đánh giá trên môi trường là dự án
+% 	      DVWA được OWASP phát triển cho mục đích học tập về an ninh ứng dụng Web.
+% \end{enumerate}
 
-\section{Thử nghiệm trên môi trường tự phát triển}
+\section{Thử nghiệm}
 
 Để đánh giá được lỗ hổng, em tự xây dựng một bài kiểm tra cho công cụ kiểm
 thử tự động ở trên. Để tập trung vào lỗ hổng đã xây dựng, em chỉ xây dựng
@@ -23,9 +23,7 @@ ngoài phạm vi đánh giá của bài thử nghiệm này.
 
 \begin{description}
 	\item[Ngôn ngữ] PHP 7.2 và Python.
-
 	\item [Cơ sở dữ liệu] MySql 5.7.38
-
 	\item [Môi trường triển khai] Docker.
 \end{description}
 
@@ -63,12 +61,10 @@ ngoài phạm vi đánh giá của bài thử nghiệm này.
 \end{description}
 
 
-\section{Đánh giá trên môi trường tự phát triển}
+\section{Đánh giá}
 
 Kết quả việc tự động kiểm thử và sử dụng tính năng tự xác minh lỗi
 hổng được phát triển \ref{fig:result_test}.
-
-Mặc dù Naf không quét đủ được các lỗ hổng so với Invicti nhưng đã khai thác tốt hơn với lỗ hổng Server Side Template Injection.
 
 \begin{table}[H]
 	\begin{tabular}{|l|l|l|l|}
@@ -105,19 +101,20 @@ em được kết quả như sau.
 
 \end{table}
 
-\section{Thử nghiệm trên dự án DVWA}
-
-Tương tự bài đánh giá trên, bài đánh giá này sẽ chỉ tập trung vào các lỗ
-hổng mà công cụ NAF đã được xây dựng để xác minh, các lỗ hổng khác sẽ nắm
-ngoài phạm vi đánh giá của bài thử nghiệm này.
-
-\subsection{Về môi trường thử nghiệm}
-
-Môi trường triển khai: DVWA 1.9 đựa trên image vulnerables/web-dvwa.
-
-\section{Đánh giá trên dự án DVWA}
+Nhận xét: Mặc dù Naf không quét đủ được các lỗ hổng so với Invicti nhưng đã khai thác tốt hơn với lỗ hổng Server Side Template Injection.
 
 
+% \section{Thử nghiệm trên dự án DVWA}
+
+% Tương tự bài đánh giá trên, bài đánh giá này sẽ chỉ tập trung vào các lỗ
+% hổng mà công cụ NAF đã được xây dựng để xác minh, các lỗ hổng khác sẽ nắm
+% ngoài phạm vi đánh giá của bài thử nghiệm này.
+
+% \subsection{Về môi trường thử nghiệm}
+
+% Môi trường triển khai: DVWA 1.9 đựa trên image vulnerables/web-dvwa.
+
+% \section{Đánh giá trên dự án DVWA}
 
 \end{document}
 
