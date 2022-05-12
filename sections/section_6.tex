@@ -1,0 +1,96 @@
+% !TeX root = ../main.tex
+\documentclass[./../main.tex]{subfiles}
+
+\begin{document}
+
+\begin{lstlisting}[language=php, caption=Lỗ hổng Command Injection, label={src:cmdi}]
+<form action="/command.php" method="post">
+<label for="site">Site</label><br>
+<input type="text" id="site" name="site"><br>
+
+<button type="submit"> Submit</button>
+</form>
+<?php
+    echo "<pre>";
+    echo shell_exec("host {$_POST["site"]}");
+    echo "</pre>";
+?>
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=php, caption=Lỗ hổng SQL Injection, label={src:sqli}]
+<?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$mysql_db = new PDO("mysql:host=mysql;dbname=sqli", "root", "password");
+
+echo "<h1>MySQL</h1>";
+echo "<h2>params:</h2>";
+$user = $_REQUEST['user'];
+$pass = $_REQUEST['pass'];
+echo "user=" . htmlspecialchars($user) . ", ";
+echo "pass=" . htmlspecialchars($pass);
+
+echo "<h2>query:</h2>";
+$query = "SELECT id, username, password FROM users WHERE username = '$user' and password = '$pass'";
+echo htmlspecialchars($query);
+
+echo "<h2>result:</h2>";
+$rows = $mysql_db->query($query);
+if ($rows) {
+    foreach ($rows as $row) {
+        echo "id=" . htmlspecialchars($row[0]) . ", ";
+        echo "username=" . htmlspecialchars($row[1]) . ", ";
+        echo "password=" . htmlspecialchars($row[2]);
+        echo "<br/>";
+    }
+}
+?>
+
+<form action="/mysql.php" method="post">
+    <label for="user">User</label><br>
+    <input type="text" id="user" name="user"><br>
+    <label for="pass">Pass</label><br>
+    <input type="text" id="pass" name="pass">
+
+    <button type="submit"> Submit</button>
+</form>
+\end{lstlisting}
+
+\begin{lstlisting}[language=php, caption=Lỗ hổng Local File Inclusion và Remote File Inclusion, label={src:rfi}]
+<?php
+
+$page = $_GET["page"] ?: "hello_world.php";
+
+include $page;
+
+echo "Hello world";
+
+\end{lstlisting}
+
+\begin{lstlisting}[language=python, caption=Lỗ hổng Server-side Template Injection,  label={src:ssti}]
+# for this we need to install flask
+from flask import *
+app = Flask(__name__)
+
+@app.route('/',methods=['GET', 'POST'])
+def base():
+    person = ""
+    if request.method == 'POST':
+      if request.form['name']:
+        person = request.form['name']
+
+    template = '<!DOCTYPE html><html><body>\
+    <form action="/ssti" method="post">\
+      First name:<br>\
+      <input type="text" name="name" value="">\
+      <input type="submit" value="Submit">\
+    </form><h2>Hello %s! </h2></body></html>' % person
+    return render_template_string(template)
+
+
+if __name__=="__main__":
+	app.run("0.0.0.0",port = 5000,debug=False)
+
+\end{lstlisting}
+
+\end{document}

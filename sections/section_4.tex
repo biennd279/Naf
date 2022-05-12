@@ -29,26 +29,30 @@ ngoài phạm vi đánh giá của bài thử nghiệm này.
 
 \subsection{Các chức năng và lỗ hổng}
 
+Việc xây dựng một ứng dụng hoàn chỉnh để thử nghiệm sẽ rất khó,
+do đó em xây dựng ứng dụng gồm các phần bị lỗi. Mỗi phần sẽ có một lỗi riêng
+theo từng chức năng.
+
 \subsubsection{Tìm kiếm người dùng}
 
 \begin{description}
 	\item[Mô tả] Chức năng cho phép tìm kiếm người dùng khi nhập đúng
-	      thông tin gồm username và password.
-	\item [Loại lỗ hổng] SQL Injection
+	      thông tin gồm username và password \ref{src:sqli}.
+	\item [Loại lỗ hổng] SQL Injection.
 \end{description}
 
 \subsubsection{Xem thông tin tên miền}
 
 \begin{description}
 	\item[Mô tả] Chức năng cho sử dụng câu lệnh `host` của hệ thống để đưa ra thông tin về ip, tên miền của website được nhập vào.
-	\item[Loại lỗ hổng] Command Injection.
+	\item[Loại lỗ hổng] Command Injection \ref{src:cmdi}.
 \end{description}
 
 \subsubsection{Biểu diễn trang}
 
 \begin{description}
 	\item[Mô tả] trang để biểu diễn một đoạn từ file khác được bằng cách
-	      include file vào nhưng cho phép người dùng điều chính tên trang.
+	      include file vào nhưng cho phép người dùng điều chính tên trang \ref{src:rfi}.
 	\item[Loại lỗ hổng] Path Traversal, Local File Inclusion, Remote
 	      File Inclusion.
 \end{description}
@@ -57,7 +61,7 @@ ngoài phạm vi đánh giá của bài thử nghiệm này.
 
 \begin{description}
 	\item[Mô tả] Một trang cho phép nhập tên người dùng để in ra sử dụng một template engine.
-	\item[Loại lỗ hổng] Server Side Template Injection.
+	\item[Loại lỗ hổng] Server Side Template Injection \ref{src:ssti}.
 \end{description}
 
 
@@ -86,7 +90,7 @@ hổng được phát triển \ref{fig:result_test}.
 \end{figure}
 
 Đồng thời đánh giá với Invicti (Nesparker) 5.8.1 là một công cụ thương mại,
-em được kết quả như sau.
+em được kết quả như sau \ref{fig:np_vulns} và \ref{fig:np_ssti}.
 \begin{table}[H]
 	\begin{tabular}{|l|l|l|l|}
 		\hline
@@ -98,8 +102,19 @@ em được kết quả như sau.
 		Local File Inclusion           & 1                 & Có                    & Có                  \\ \hline
 	\end{tabular}
 	\caption{Kết quả đánh thử nghiệm của Invicti trên môi trường tự phát triển}
-
 \end{table}
+
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/np_ssti.png}
+	\caption{Kết quả đánh thử nghiệm của Invicti trên môi trường tự phát triển}
+	\label{fig:np_vulns}
+\end{figure}
+
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/np_vulns.png}
+	\caption{Kết quả đánh thử nghiệm của Invicti trên lỗ hổng SSTI}
+	\label{fig:np_ssti}
+\end{figure}
 
 Nhận xét: Số lượng lỗ hổng rà quét được của NAF khi sử dụng ZAP không đầy đủ so với Invicti do phụ thuộc vào các luật của cộng đồng phát triển, nhưng NAF đã khai thác tốt hơn với lỗ hổng Server Side Template Injection.
 
