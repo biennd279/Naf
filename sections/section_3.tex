@@ -35,7 +35,7 @@ sẽ phụ trách một Logic riêng theo từng phần của công cụ. Các t
 này phụ thuộc nhau dạng cây như hình \ref{fig:component} và được tổ chức
 mã nguồn như hình \ref{fig:package}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/component.png}
 	\caption{Biểu đồ phụ thuộc của các thành phần}
 	\label{fig:component}
@@ -44,7 +44,7 @@ mã nguồn như hình \ref{fig:package}.
 Đối với ngôn ngữ triển khai, em lựa chọn Kotlin là một ngôn ngữ JVM
 có thể tương tác được với Java.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/package.png}
 	\caption{Tổ chức component trong mã nguồn}
 	\label{fig:package}
@@ -60,7 +60,13 @@ Như đã nêu vấn đề ở trên, ZAP sử dụng các Addon như một ph�
 thích hợp các công cụ xác minh tự động khá khó. Do đó, em xây dựng một
 đường ống (Pipeline) để tương tác được với ZAP Core, sử dụng được với các
 ZAP Addons khác, đồng thời có thể thêm các chi tiết khác vào quá trình kiểm
-thử tự động.
+thử tự động được biểu diễn như hình \ref{fig:pipeline_component}.
+
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/pipeline_component.png}
+	\caption{Biểu đồ tương tác với đường ống}
+	\label{fig:pipeline_component}
+\end{figure}
 
 Mỗi đoạn ống sẽ thuộc về một pha xác định của kiểm thử, pha có độ ưu tiên
 cao được thực hiện trước để cung cấp thông tin cho các pha sau.
@@ -80,7 +86,7 @@ Các kiến trúc này xoay quanh các khai niệm sau:
 \subsection{Khởi tạo}
 
 Đối với các đoạn của đường ống là đoạn khởi tạo ngữ cảnh thì cần có tương
-tác trực tiếp với cả ZAP Core và cả đường ống.
+tác trực tiếp với cả ZAP Core và cả đường ống đã được thể hiện trong \ref{fig:pipeline_component}.
 
 Các tương tác này được xử lý như sau
 \begin{itemize}
@@ -107,7 +113,7 @@ Các tương tác này được xử lý như sau
 		            tiêu kiểm thử, mức độ này sẽ được trả về hệ thống thông
 		            qua cơ chế Thông báo (Alert)
 	      \end{itemize}
-	      \begin{figure}[h!]
+	      \begin{figure}[ht!]
 		      \includegraphics[width=\linewidth]{./images/policy.png}
 		      \caption{ Điều chỉnh các các chính sách }
 		      \label{fig:policy}
@@ -122,7 +128,7 @@ Các tương tác này được xử lý như sau
 		      \item Thông tin ủy nhiệm (Credential)
 		      \item Biểu hiện khi đã đăng nhập/đăng xuất.
 	      \end{itemize}
-	      \begin{figure}[h!]
+	      \begin{figure}[ht!]
 		      \includegraphics[width=\linewidth]{./images/authen.png}
 		      \caption{ Đưa ra thông tin xác thực }
 		      \label{fig:authen}
@@ -154,13 +160,19 @@ cũng như cung cấp một vài danh sách các từ phổ biến cho việc ki
 (người dùng lựa chọn) để thực hiện việc kiểm thử này. Việc này cũng được
 thiết đặt tự động trong trình Wizard thay vì phải thiết lập thủ công \ref{fig:fuzz}.
 
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/fuzz_stage.png}
+	\caption{Biểu đồ tương tác thành phần kiểm thử mờ}
+	\label{fig:fuzz_stage}
+\end{figure}
+
 Đây là một trong đoạn đầu tiên của đường ống, nên chưa có nhiều thông tin
 về ngữ cảnh được cung cấp, nên chỉ cần dựa trên danh sách các từ được người
 dùng  lựa chọn và các tùy chọn để thực hiện kiểm thử mờ và cố gắng thu thập
 lại lượng endpoint phù hợp để sinh ra lượng Site Node lớn nhất để có
 thông tin về Website.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/fuzz.png}
 	\caption{Tùy chọn danh sách các từ để kiểm thử mờ}
 	\label{fig:fuzz}
@@ -185,7 +197,13 @@ bằng cách thực thi Javascript như một trình duyệt thực.
 Hai Addon này cần sử dụng trực tiếp các thông tin từ ngữ cảnh của ZAP Core.
 Để tự động được các Addon này cần đồng thời xử lý thông tin ở ZAP Context
 trước khi gửi thông tin cho Addon và thực thiện gọi các Addon thực hiện
-theo trình tự của của các pha.
+theo trình tự của của các pha như \ref{fig:crawl_stage}.
+
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/crawl_stage.png}
+	\caption{Biểu đồ tương tác thành phần thu thập thông tin}
+	\label{fig:crawl_stage}
+\end{figure}
 
 Các đoạn của đường ống này có mục tiêu là tối ưu hóa việc thu thập dữ liệu từ
 DOM và các yêu cầu Ajax. Để chúng hoạt động tốt nhất cần cung cấp
@@ -210,7 +228,13 @@ cần thích hợp thêm công cụ để phát hiện được các lỗ hổng
 cảnh báo. Quá trình này cũng cần được cung cấp ZAP Context để có thể thực
 hiện ca kiểm thử mà không hủy bỏ do vấn đề xác thực. Đồng thời cũng nên đưa
 vào các vùng nguy hiểm trong phạm để tránh làm lỗ hệ thống (ví dụ các
-thiết lập tài khoản, hệ thống).
+thiết lập tài khoản, hệ thống) như hình \ref{fig:scan_stage}.
+
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/scan_stage.png}
+	\caption{Biểu đồ tương tác thành phần rà quét}
+	\label{fig:scan_stage}
+\end{figure}
 
 Việc cài đặt bước này cần đem được các thông tin từ pha trước kết hợp
 với thông tin người dùng cung cấp để thực hiện. Các Addons tương đối độc
@@ -218,7 +242,7 @@ lập nên thông tin đầu ra của từng Addons là khác nhau và không �
 các thông tin đầu ra được thu thập, chuẩn hóa và đưa lại vào trong AVA
 để trực quan hóa thông tin \ref{fig:scan_result}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/scan_result.png}
 	\caption{Kết quả crawl}
 	\label{fig:scan_result}
@@ -240,7 +264,7 @@ chuẩn hóa từ dạng JSON vào trong hệ thống, đưa thành các cảnh 
 
 Mô hình xử lý có thể biểu diễn như \ref{fig:nuclei}:
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/nuclei.png}
 	\caption{Biểu đồ tương tác giữa Nuclei và Đường ống}
 	\label{fig:nuclei}
@@ -254,16 +278,23 @@ lại cho đường ống để cập nhật các thông tin trên thông qua AP
 
 Các công cụ xác minh tự động làm nhiệm vụ xác minh lại các cảnh bảo,
 nếu được xác minh, một Vấn đề (Issue) mới được tạo ra và được thêm vào cơ sở dữ
-liệu.
+liệu như \ref{fig:validate_stage}.
 
 Để xác định được cảnh báo nào thuộc về lỗ hổng nào cần sử dụng đến
 giá trị định danh của Common Weakness Enumeration (CWE) để xác định
 tương đối lỗ hổng nào thuộc về loại nào.
 
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/validate_stage.png}
+	\caption{Biểu đồ tương tác trong thành phần xác minh}
+	\label{fig:validate_stage}
+\end{figure}
+
 Cần xem quét cách mà các luật được sử dụng để đưa ra được cách xác minh phù
 hợp với từ loại lỗ hổng. Trong phạm vi của công cụ, các lỗ hổng đã được
 xem xét thông qua mã nguồn của các luật được sử dụng trong rà quét chủ động
 bao gồm:
+
 \begin{description}
 	\item[SQL Injection] Luật thiết lập ZAP chủ động gửi các trọng tải mang
 	      gây lỗi cho các truy vấn SQL như ', \textbackslash, ;, (, ), NULL, \ldots
@@ -291,7 +322,6 @@ bao gồm:
 
 \end{description}
 
-
 Qua các triển khai của luật trên, các lỗ hổng cần được xác minh cần được
 phân phối cho các công cụ và được triển khai như sau:
 \begin{description}
@@ -316,7 +346,7 @@ cụ gửi lên. Các yêu cầu có thể là xác minh lỗ hổng, lấy các
 cơ sở dữ liệu.
 
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/SQLMap.png}
 	\caption{Biểu đồ tương tác giữa SQLMap và công cụ.}
 	\label{fig:sqlmap}
@@ -333,7 +363,7 @@ chuẩn(STDOUT) \ref{fig:commix_tplmap}.
 thi và lấy được đầu vào chuẩn và đầu ra chuẩn của Container.
 
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/DockerIO.png}
 	\caption{Biểu đồ tương tác công cụ với Commix và Tplmap.}
 	\label{fig:commix_tplmap}
@@ -373,7 +403,7 @@ thông tin ra ngoài nên lượng thông tin em cần thực hiện qua một s
 thuật khác với luồng hoạt động thông thường của ZAP để có thể tổng hợp
 được nhiều và đầy đủ hơn lượng thông tin \ref{fig:state}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/state.png}
 	\caption{Thanh trạng thái pipeline đang chạy}
 	\label{fig:state}
@@ -397,7 +427,7 @@ cấp đủ thông tin về lỗ hổng \ref{fig:alert}.
 
 Các cảnh báo có thể gửi tới các tab khai thác.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/alert.png}
 	\caption{Quản lý alert chung của các công cụ thích hợp}
 	\label{fig:alert}
@@ -406,7 +436,7 @@ Các cảnh báo có thể gửi tới các tab khai thác.
 Báo cáo sinh ra cho phép sử dụng Issue không phải trạng thái
 UNKNOWN để tạo ra một File PDF chứa báo cáo với format định trước \ref{fig:report}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/report.png}
 	\caption{Sinh báo cáo cho các lỗ hổng.}
 	\label{fig:report}
@@ -417,7 +447,13 @@ UNKNOWN để tạo ra một File PDF chứa báo cáo với format định trư
 Ngoài việc xác minh tự động trong đường ống, các công cụ thích
 hợp còn có thể sử dụng như một công cụ khai thác tự động trong ZAP.
 Việc thích hợp sử dụng chung các thành phần chính với công cụ xác minh
-tự động.
+tự động như \ref{fig:exploit}.
+
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/exploit.png}
+	\caption{Biểu đồ tương tác chức năng khai thác/hậu khai thác}
+	\label{fig:exploit}
+\end{figure}
 
 Để thuận tiện cho việc khai thác thì có thể tạo ra nhiều nhãn (Tab)
 khai thác khác nhau, mỗi nhãn này là các yêu cầu khai thác khác nhau.
@@ -427,7 +463,7 @@ khi hết phiên để tránh lộ thông tin do các vấn đề về an toàn.
 Với lỗ hổng này, người dùng có thể khai thác từ một cách tự động
 bằng cách trích xuất các thông tin từ lỗ hổng \ref{fig:sqlmap_explot}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/sqlmap_explot.png}
 	\caption{Khai thác lỗ hổng SQL Injection thông qua SQLMap}
 	\label{fig:sqlmap_explot}
@@ -442,7 +478,7 @@ Dữ liệu đầu vào cũng có thể gửi từ cảnh báo sang tương tự
 Các câu lệnh sẽ được gửi tới Commix và nhận về output tương tự một
 trình pseudo-shell \ref{fig:commix_exploit}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/commix_exploit.png}
 	\caption{Khai thác lỗ hổng OS Command Injection bằng Commix	}
 	\label{fig:commix_exploit}
@@ -453,7 +489,7 @@ sang từ một cảnh báo.
 Các câu lệnh trong Tplmap cũng được cài đặt để nhận một đầu vào và
 một đầu ra nhưng một trình pseudo-shell \ref{fig:tplmap_exploit}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/tplmap_exploit.png}
 	\caption{Khai thác lỗ hổng SSTI bằng Tplmap}
 	\label{fig:tplmap_exploit}
@@ -466,7 +502,7 @@ thông qua một tập tin thực thi tự triển khai được công khai trê
 Trong đây sẽ có một số tham số cho phép mình thực thi lệnh, các đầu ra
 của lệnh sẽ được gửi về bằng cách phân tích phản hồi của yêu cầu \ref{fig:rfi_exploit}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/rfi_exploit.png}
 	\caption{Khai thác lỗ hổng RFI bằng RFI Exploiter}
 	\label{fig:rfi_exploit}
@@ -478,7 +514,7 @@ em triển khai bằng cách cho phép người dùng lựa chọn một số đ
 dẫn và thay đổi các đường dẫn để lấy dữ liệu về, người dùng có thể
 xem dữ liệu trả về thông qua việc quan sát phản hồi \ref{fig:lfi_exploit}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/lfi_exploit.png}
 	\caption{Khai thác LFI/Path Traversal bằng công cụ LFI Exploiter}
 	\label{fig:lfi_exploit}
@@ -502,7 +538,7 @@ Docker có cung cấp Interface để giao tiếp với Docker Daemon thông qua
 REST-API. Java và Kotlin không được hỗ trợ chính thức các thư viện để
 giao tiếp nhưng cộng đồng có các thư viện để giao tiếp tuy nhiên đã cũ
 và có rất ít tài liệu hướng dẫn nên cần bọc lại cung cấp một API hoàn
-chỉnh hơn cho các thành phần sử dụng \ref{fig:doc}.
+chỉnh hơn cho các thành phần sử dụng \ref{fig:docker}.
 
 Các API này bao gồm
 \begin{itemize}
@@ -516,7 +552,7 @@ Các API này bao gồm
 có các Network Interface cùng với hệ điều hành để tránh việc kết nối
 bị từ chối do Container sử dụng một mạng ảo riêng.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/docker.png}
 	\caption{Quản lý Docker của từng thành phần}
 	\label{fig:docker}
