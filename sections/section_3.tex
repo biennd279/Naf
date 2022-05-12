@@ -237,8 +237,18 @@ trường hợp này.
 được xây dựng từ ngôn ngữ Go nên Nuclei là một tập tin khởi chạy nhị phân và cần bắt
 lấy đầu và chuẩn và đầu ra chuẩn để lấy được dữ liệu. Dữ liệu đầu vào cũng cần được
 chuẩn hóa từ dạng JSON vào trong hệ thống, đưa thành các cảnh báo đã được xác minh.
-Mô hình xử lý có thể biểu diễn như sau:
-% ảnh
+
+Mô hình xử lý có thể biểu diễn như \ref{fig:nuclei}:
+
+\begin{figure}[h!]
+	\includegraphics[width=\linewidth]{./images/nuclei.png}
+	\caption{Biểu đồ tương tác giữa Nuclei và Đường ống}
+	\label{fig:nuclei}
+\end{figure}
+
+Trong đó, Nuclei Parser sẽ làm đồng thời cả hai nhiệm vụ
+lắng nghe các thông tin đầu ra của Nuclei và xử lý thông tin đó gửi trả
+lại cho đường ống để cập nhật các thông tin trên thông qua API.
 
 \subsection{Thích hợp công cụ xác minh tự động}
 
