@@ -18,7 +18,7 @@ lệnh bất thường làm lộ thông tin Cơ sở dữ liệu hoặc tệ hơ
 sở dữ liệu mất quyền kiểm soát.
 
 Ví dụ với ngôn ngữ PHP dưới đây
-\begin{lstlisting}[language=php, caption=SQL Injection]
+\begin{lstlisting}[language=php, caption=Lỗ hổng SQL Injection]
     // The article parameter is assigned to $article
     // variable without any sanitization or validation
     $articleid = $_GET['article'];
@@ -46,7 +46,7 @@ máy chủ Web.
 Ví dụ với ngôn ngữ PHP dưới đây về một chương trình giúp phân giải tên miền
 thông qua câu lệnh `host' của Linux
 
-\begin{lstlisting}[language=php, caption=OS Command Injection]
+\begin{lstlisting}[language=php, caption=Lỗ hổng OS Command Injection]
     echo shell_exec("host {$_POST["site"]}");
 \end{lstlisting}
 
@@ -57,7 +57,7 @@ Remote Code Evaluation là lỗ hổng cho phép thực thi các đoạn mã tr�
 
 Một ví dụ về việc thực thi `eval()' trong PHP dẫn đến lỗ hổng
 
-\begin{lstlisting}[language=php, caption=Remote Code Evaluation]
+\begin{lstlisting}[language=php, caption=Lỗ hổng Remote Code Evaluation]
     eval ("echo ".$_REQUEST["parameter"].";");
 \end{lstlisting}
 
@@ -69,7 +69,7 @@ thi lệnh trái phép trên máy chủ Web.
 
 Ví dụ đoạn mã sau
 
-\begin{lstlisting}[language=php, caption=Server Side Template Injection]
+\begin{lstlisting}[language=php, caption=Lỗ hổng Server Side Template Injection]
     $output = $twig->render($_GET['custom_email'],  array("first_name" => $user.first_name) );
 \end{lstlisting}
 
@@ -83,7 +83,7 @@ trái phép trên máy chủ Web.
 
 Ví dụ như đoạn mã sau:
 
-\begin{lstlisting}[language=php, caption=Local File Inclusion]
+\begin{lstlisting}[language=php, caption=Lỗ hổng Local File Inclusion]
     $file = $_GET['file'];
     include($file);
 \end{lstlisting}
