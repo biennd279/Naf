@@ -2,7 +2,7 @@
 \documentclass[./../main.tex]{subfiles}
 
 \begin{document}
-\subsection{Tổng quan ứng dụng}
+\section{Mô hình tổng quan}
 
 Dù rằng ZAP đã cung cấp một mô hình tương đối hoàn chỉnh để thực hiện được
 việc kiểm thử an toàn thông tin, nhưng phần lớn các ZAP Addon lại rất
@@ -29,15 +29,15 @@ Addon để nâng mức tự động lên mức độ chấp nhận được và
 các chi tiết, tính năng thiếu đã nêu ở trên để phù hợp đây là một công
 cụ tự động xác minh và khai thác tự động.
 
-\subsection{Các component}
-Các thành phần sẽ được mô hình hóa thành các Component. Mỗi Component
-sẽ phụ trách một Logic riêng theo từng phần của công cụ. Các Component
+\subsection{Các thành phần}
+Các thành phần sẽ được mô hình hóa thành các thành phần. Mỗi thành phần
+sẽ phụ trách một Logic riêng theo từng phần của công cụ. Các thành phần
 này phụ thuộc nhau dạng cây như hình \ref{fig:component} và được tổ chức
 mã nguồn như hình \ref{fig:package}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{./images/component.png}
-	\caption{Biểu đồ phụ thuộc của các Component}
+	\caption{Biểu đồ phụ thuộc của các thành phần}
 	\label{fig:component}
 \end{figure}
 
@@ -51,11 +51,11 @@ có thể tương tác được với Java.
 \end{figure}
 
 Về triển khai giao diện người dùng và tổ chức mã nguồn, em lựa chọn
-Jetpack Compose và Decompose làm các thư viện chính và tổ chức Component
+Jetpack Compose và Decompose làm các thư viện chính và tổ chức thành phần
 thay cho Swing - một thư viện khá cũ và khó tổ chức khi đưa cả logic và
 giao diện người vào chung một mã nguồn.
 
-\subsection{Kiến trúc kiểm thử tự động theo đường ống}
+\section{Chức năng kiểm thử theo đường ống}
 Như đã nêu vấn đề ở trên, ZAP sử dụng các Addon như một phần nên việc
 thích hợp các công cụ xác minh tự động khá khó. Do đó, em xây dựng một
 đường ống (Pipeline) để tương tác được với ZAP Core, sử dụng được với các
@@ -65,7 +65,7 @@ thử tự động.
 Mỗi đoạn ống sẽ thuộc về một pha xác định của kiểm thử, pha có độ ưu tiên
 cao được thực hiện trước để cung cấp thông tin cho các pha sau.
 
-Các pha bao gồm: Khởi tạo, Kiểm thử mờ, Cào dữ liệu, Rà quét lỗ hổng.
+Các pha bao gồm: Khởi tạo, Kiểm thử mờ, Thu thập dữ liệu, Rà quét lỗ hổng.
 
 Các kiến trúc này xoay quanh các khai niệm sau:
 \begin{itemize}
@@ -77,7 +77,7 @@ Các kiến trúc này xoay quanh các khai niệm sau:
 	      hiện quá trình kiểm thử tự động.
 \end{itemize}
 
-\subsubsection{Khởi tạo}
+\subsection{Khởi tạo}
 
 Đối với các đoạn của đường ống là đoạn khởi tạo ngữ cảnh thì cần có tương
 tác trực tiếp với cả ZAP Core và cả đường ống.
@@ -138,7 +138,7 @@ trạng thái có thể lưu lại, chỉ được thực hiện khi bắt đầ
 kiểm thử tự động. Khi kiểm thử tự động sẽ dựa vào các thông tin này
 để sinh ra các thiết lập để đưa vào ZAP Core một cách tự động.
 
-\subsubsection{Kiểm thừ mờ}
+\subsection{Kiểm thừ mờ}
 Một việc cần thiết là để ZAP có thể hoạt động hiệu quả cung cấp thêm
 thông tin về cấu trúc của Website cho ZAP. Một trong những phương pháp
 phổ biến cho việc này là vét cạn các điểm cuối thường có của một Website
@@ -166,19 +166,19 @@ thông tin về Website.
 	\label{fig:fuzz}
 \end{figure}
 
-\subsubsection{Cào dữ liệu}
+\subsection{Thu thập dữ liệu}
 
 Một cách nữa để cung cấp thông tin về cấu trúc của Website là
-cào (Crawl) dữ liệu trên toàn bộ Website để lấy thông tin.
+thu thập (Crawl) dữ liệu trên toàn bộ Website để lấy thông tin.
 
 Đội ngũ phát triển ZAP cũng đã phát triển hai Addon là Spider và
-Ajax Spider. Spider được sử dụng để cào dữ liệu, thông tin lấy từ cây
+Ajax Spider. Spider được sử dụng để thu thập dữ liệu, thông tin lấy từ cây
 DOM của Website trong các phản hồi của các thông báo HTTP.
 
 Đối với một số Website sẽ sử dụng thêm Ajax để lấy thông tin từ máy
-chủ, các trình cào dữ liệu tĩnh như Spider sẽ không phát hiện được các yêu cầu này.
+chủ, các trình thu thập dữ liệu tĩnh như Spider sẽ không phát hiện được các yêu cầu này.
 Đội ngũ phát triển ZAP cũng đã phát triển thêm Ajax Spider, công cụ xây
-dựng dựa trên Selenium để thực hiện việc cào dữ liệu trực tiếp bằng
+dựng dựa trên Selenium để thực hiện việc thu thập dữ liệu trực tiếp bằng
 Selenium đấy được thông tin về các yêu cầu thực hiện thông qua Ajax
 bằng cách thực thi Javascript như một trình duyệt thực.
 
@@ -187,12 +187,12 @@ Hai Addon này cần sử dụng trực tiếp các thông tin từ ngữ cảnh
 trước khi gửi thông tin cho Addon và thực thiện gọi các Addon thực hiện
 theo trình tự của của các pha.
 
-Các đoạn của đường ống này có mục tiêu là tối ưu hóa việc cào dữ liệu từ
+Các đoạn của đường ống này có mục tiêu là tối ưu hóa việc thu thập dữ liệu từ
 DOM và các yêu cầu Ajax. Để chúng hoạt động tốt nhất cần cung cấp
 ZAP Context chứa các thông tin về phạm vi và thông tin đăng nhập để quá
-trình cào dữ liệu không bị hủy bỏ do vấn đề xác thực.
+trình thu thập dữ liệu không bị hủy bỏ do vấn đề xác thực.
 
-\subsubsection{Rà quét lỗ hổng}
+\subsection{Rà quét lỗ hổng}
 
 Đây là pha chính trong việc kiểm thử an ninh, tại đây các luật (Rule)
 của cộng đồng đóng góp sẽ được sử dụng để kiểm tra các hành vi của hệ
@@ -224,7 +224,7 @@ các thông tin đầu ra được thu thập, chuẩn hóa và đưa lại vào
 	\label{fig:scan_result}
 \end{figure}
 
-\subsubsection{Rà quét lỗ hổng của thành phần bên thứ ba}
+\subsection{Rà quét lỗ hổng của thành phần bên thứ ba}
 
 Đối với các thành phần thứ ba như thư viện, khung phát triển hay các máy chủ Web,
 thì việc sử dụng các thành phần cũ có thể khiến ứng dụng Web có thể bị khai thác
@@ -354,7 +354,7 @@ Lỗ hổng này sẽ không cần xác minh lại do độ, nhưng vẫn đư�
 phát triển công cụ khai thác. Lỗ hổng này cũng không có dự án mã nguồn
 mở để khai thác nên em cũng tự triển khai một trình khai thác riêng.
 
-\subsection{Trực quan hóa thông tin}
+\section{Chức năng hiển thị}
 Dù là các ZAP Addons cung cấp khá đầy đủ các thông tin về thông tin của
 chính Addons đó cho người dùng nhưng chính sự độc lập của các Addons lại
 khiến thông tin của toàn bộ ứng dụng ZAP nói chung lại bị phân tán thành
@@ -379,7 +379,7 @@ thuật khác với luồng hoạt động thông thường của ZAP để có 
 	\label{fig:state}
 \end{figure}
 
-\subsection{Quản lý Vấn đề và sinh báo cáo}
+\section{Chức năng quản lý sự kiện và sinh báo cáo}
 Theo luồng được cộng đồng ZAP định ra, thì cảnh báo (Alert) là đơn
 vị được sử dụng để quản lý các lỗ hổng được sinh ra từ ZAP, tuy nhiên
 điều này hơi không phù hợp do hai lý do. Một là lượng cảnh báo mà ZAP
@@ -390,9 +390,9 @@ phát triển xử lý. Điều này dẫn để cần chuẩn hóa lại các m
 phù hợp với mục đích cuối cùng là giúp nhà phát triển và vấn hành
 xử lý được các lỗ hổng tồn tại.
 
-Từ đó em đã mô hình hóa lại thành Vấn đề (Issue) để xử lý hai vấn đề ở trên:
+Từ đó em đã mô hình hóa lại thành sự kiện (Issue) để xử lý hai vấn đề ở trên:
 chỉ sử dụng cảnh báo nhưng một nguồn và định thông tin tiêu chuẩn để
-báo cáo xử lý và cho phép xuất ra một bản báo cáo dạng rich text để cung
+báo cáo xử lý và cho phép xuất ra một bản báo cáo dễ hình hơn để cung
 cấp đủ thông tin về lỗ hổng \ref{fig:alert}.
 
 Các cảnh báo có thể gửi tới các tab khai thác.
@@ -412,7 +412,7 @@ UNKNOWN để tạo ra một File PDF chứa báo cáo với format định trư
 	\label{fig:report}
 \end{figure}
 
-\subsection{Các công cụ khai thác và hậu khai thác}
+\section{Chức năng khai thác và hậu khai thác}
 
 Ngoài việc xác minh tự động trong đường ống, các công cụ thích
 hợp còn có thể sử dụng như một công cụ khai thác tự động trong ZAP.
@@ -423,7 +423,7 @@ tự động.
 khai thác khác nhau, mỗi nhãn này là các yêu cầu khai thác khác nhau.
 Tuy nhiên, đặc điểm chung là các nhãn này sẽ không bao giờ được lưu lại
 khi hết phiên để tránh lộ thông tin do các vấn đề về an toàn.
-\subsubsection{SQLMap}
+\subsection{SQLMap}
 Với lỗ hổng này, người dùng có thể khai thác từ một cách tự động
 bằng cách trích xuất các thông tin từ lỗ hổng \ref{fig:sqlmap_explot}.
 
@@ -447,7 +447,7 @@ trình pseudo-shell \ref{fig:commix_exploit}.
 	\caption{Khai thác lỗ hổng OS Command Injection bằng Commix	}
 	\label{fig:commix_exploit}
 \end{figure}
-\subsubsection{Tplmap}
+\subsection{Tplmap}
 Tương tự SQLMap và Commix, Tplmap  câu lệnh khởi tạo có thể được gửi
 sang từ một cảnh báo.
 Các câu lệnh trong Tplmap cũng được cài đặt để nhận một đầu vào và
@@ -459,7 +459,7 @@ một đầu ra nhưng một trình pseudo-shell \ref{fig:tplmap_exploit}.
 	\label{fig:tplmap_exploit}
 \end{figure}
 
-\subsubsection{Remote File Inclusion}
+\subsection{Remote File Inclusion}
 
 Việc khai thác Remote File Inclusion PHP được em triển khai bằng cách
 thông qua một tập tin thực thi tự triển khai được công khai trên Internet.
@@ -471,7 +471,7 @@ của lệnh sẽ được gửi về bằng cách phân tích phản hồi củ
 	\caption{Khai thác lỗ hổng RFI bằng RFI Exploiter}
 	\label{fig:rfi_exploit}
 \end{figure}
-\subsubsection{Local File Inclusion/Path Traversal}
+\subsection{Local File Inclusion/Path Traversal}
 
 Trình khai thác lỗ hổng Local File Inclusion/Path Traversal được
 em triển khai bằng cách cho phép người dùng lựa chọn một số đường
@@ -483,7 +483,8 @@ xem dữ liệu trả về thông qua việc quan sát phản hồi \ref{fig:lfi
 	\caption{Khai thác LFI/Path Traversal bằng công cụ LFI Exploiter}
 	\label{fig:lfi_exploit}
 \end{figure}
-\subsection{Đóng gói các thành phần}
+
+\section{Đóng gói các thành phần}
 
 Ngoài việc cần có các Interface để giao tiếp với từng công cụ mã nguồn
 mở khác nhau thì cũng cần đóng gói các công cụ mở rộng vào thành một
@@ -501,7 +502,7 @@ Docker có cung cấp Interface để giao tiếp với Docker Daemon thông qua
 REST-API. Java và Kotlin không được hỗ trợ chính thức các thư viện để
 giao tiếp nhưng cộng đồng có các thư viện để giao tiếp tuy nhiên đã cũ
 và có rất ít tài liệu hướng dẫn nên cần bọc lại cung cấp một API hoàn
-chỉnh hơn cho các Component sử dụng \ref{fig:doc}.
+chỉnh hơn cho các thành phần sử dụng \ref{fig:doc}.
 
 Các API này bao gồm
 \begin{itemize}

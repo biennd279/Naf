@@ -12,14 +12,14 @@
 % 	      DVWA được OWASP phát triển cho mục đích học tập về an ninh ứng dụng Web.
 % \end{enumerate}
 
-\section{Thử nghiệm}
-
 Để đánh giá được lỗ hổng, em tự xây dựng một bài kiểm tra cho công cụ kiểm
 thử tự động ở trên. Để tập trung vào lỗ hổng đã xây dựng, em chỉ xây dựng
 các lỗ hổng cho công cụ mình có thể khai thác. Các lỗ hổng khác sẽ nằm
 ngoài phạm vi đánh giá của bài thử nghiệm này.
 
-\subsection{Về môi trường thử nghiệm}
+\section{Môi trường thử nghiệm}
+
+\subsection{Môi trường thời gian chạy}
 
 \begin{description}
 	\item[Ngôn ngữ] PHP 7.2 và Python.
@@ -27,7 +27,7 @@ ngoài phạm vi đánh giá của bài thử nghiệm này.
 	\item [Môi trường triển khai] Docker.
 \end{description}
 
-\subsection{Về các chức năng và lỗ hổng}
+\subsection{Các chức năng và lỗ hổng}
 
 \subsubsection{Tìm kiếm người dùng}
 
@@ -37,7 +37,7 @@ ngoài phạm vi đánh giá của bài thử nghiệm này.
 	\item [Loại lỗ hổng] SQL Injection
 \end{description}
 
-\subsubsection{Xem thông tin Domain}
+\subsubsection{Xem thông tin tên miền}
 
 \begin{description}
 	\item[Mô tả] Chức năng cho sử dụng câu lệnh `host` của hệ thống để đưa ra thông tin về ip, tên miền của website được nhập vào.
@@ -97,11 +97,12 @@ em được kết quả như sau.
 		Remote File Inclusion          & 1                 & Có                    & Có                  \\ \hline
 		Local File Inclusion           & 1                 & Có                    & Có                  \\ \hline
 	\end{tabular}
-	\caption{Kết quả đánh thử nghiệm của Nesparker trên môi trường tự phát triển}
+	\caption{Kết quả đánh thử nghiệm của Invicti trên môi trường tự phát triển}
 
 \end{table}
 
-Nhận xét: Mặc dù Naf không quét đủ được các lỗ hổng so với Invicti nhưng đã khai thác tốt hơn với lỗ hổng Server Side Template Injection.
+Nhận xét: Mặc dù NAF không quét đủ được các lỗ hổng so với Invicti nhưng
+đã khai thác tốt hơn với lỗ hổng Server Side Template Injection.
 
 
 % \section{Thử nghiệm trên dự án DVWA}
