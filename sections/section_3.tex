@@ -2,6 +2,20 @@
 \documentclass[./../main.tex]{subfiles}
 
 \begin{document}
+
+\section{Giới thiệu công cụ Nextgen Automation Framework}
+
+Do trên thị trường hiện nay chỉ có Invicti (hay NetSparker) và Acunetix (gần đây được thừa hưởng một phần từ NetSparker khi NetSparker được công ty mẹ của Acunetix mua lại) có sử dụng phương pháp đưa ra bằng chứng khai thác để giảm thời gian rút ngắn việc xác minh lỗ hổng. Tuy nhiên, do là các công cụ mã nguồn đóng nên không tận dụng được triệt để các đóng góp của cộng đồng vào trong sản phẩm của mình. Đây cũng là sản phẩm đắt tiền cần khoản đầu tư lớn của doanh nghiệp khi muốn sử dụng các sản phầm này.
+
+Trái lại với nó, ZAP là một công cụ mã nguồn mở phổ biến được phát triển liên tục. Nếu được tích hợp cùng các công cụ khai thác mã nguồn mở khác sẽ đem lại khả năng rà quét mạnh mẽ của ZAP và khả năng sinh ra các bằng chứng khai thác thông qua cộng đồng, giúp ZAP có khả năng giống các công cụ thương mại trên thị trường khác.
+
+Với mục đích này, công cụ Nextgen Automation Framework được phát triển trong phạm vi khóa luận với mong muốn đạt được mục tiêu
+\begin{enumerate}
+	\item Công cụ hỗ trợ rà quét và khai thác tự động cung cấp được bằng chứng khai thác.
+	\item Có khả năng tích hợp tính năng mạnh nhật của các công cụ sẵn có như SQLMap, Commix,\ldots
+	\item Cung cấp thêm các chức năng báo cáo, khai thác và hậu khai thác, tự động hóa.
+\end{enumerate}
+
 \section{Mô hình tổng quan}
 
 Dù rằng ZAP đã cung cấp một mô hình tương đối hoàn chỉnh để thực hiện được
@@ -24,14 +38,12 @@ Ngoài ra, các ZAP Addon cũng không thể cung cấp được các công cụ
 lỗ hổng chuyên sâu hoặc lỗ hổng mức hệ thống và thiếu vắng đi các công
 cụ khai thác tự động để đưa ra được Proof-of-Exploit cho lỗ hổng.
 
-Do đó, công cụ AVA được sinh ra để thống nhất việc tương tác giữa các
+Do đó, công cụ NAF được sinh ra để thống nhất việc tương tác giữa các
 Addon để nâng mức tự động lên mức độ chấp nhận được và bổ sung thêm
 các chi tiết, tính năng thiếu đã nêu ở trên để phù hợp đây là một công
 cụ tự động xác minh và khai thác tự động.
 
-\subsection{Các thành phần}
-Các thành phần sẽ được mô hình hóa thành các thành phần. Mỗi thành phần
-sẽ phụ trách một Logic riêng theo từng phần của công cụ. Các thành phần
+Các chức này này sẽ được mô hình hóa thành các thành phần cụ thể trong mã nguồn. Mỗi thành phần sẽ phụ trách một Logic riêng theo từng phần của công cụ. Các thành phần
 này phụ thuộc nhau dạng cây như hình \ref{fig:component} và được tổ chức
 mã nguồn như hình \ref{fig:package}.
 
@@ -42,11 +54,11 @@ mã nguồn như hình \ref{fig:package}.
 \end{figure}
 
 Đối với ngôn ngữ triển khai, em lựa chọn Kotlin là một ngôn ngữ JVM
-có thể tương tác được với Java.
+có thể tương tác được với JNAF.
 
 \begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/package.png}
-	\caption{Tổ chức component trong mã nguồn}
+	\caption{Tổ chức thành phần trong mã nguồn}
 	\label{fig:package}
 \end{figure}
 
@@ -57,7 +69,7 @@ giao diện người vào chung một mã nguồn.
 
 \section{Chức năng kiểm thử theo đường ống}
 Như đã nêu vấn đề ở trên, ZAP sử dụng các Addon như một phần nên việc
-thích hợp các công cụ xác minh tự động khá khó. Do đó, em xây dựng một
+tích hợp các công cụ xác minh tự động khá khó. Do đó, em xây dựng một
 đường ống (Pipeline) để tương tác được với ZAP Core, sử dụng được với các
 ZAP Addons khác, đồng thời có thể thêm các chi tiết khác vào quá trình kiểm
 thử tự động được biểu diễn như hình \ref{fig:pipeline_component}.
@@ -222,7 +234,7 @@ là công cụ hiệu quả cho việc chạy các luật được đưa ra củ
 ngữ cảnh của ZAP. Chính công cụ này sẽ thực hiện việc thử các luật, loại bỏ
 bớt các luật dựa trên các tập công nghệ được đưa vào, lựa chọn các ca kiểm
 thử phù hợp với ngưỡng quét và đưa ra cảnh báo dựa trên mức độ cảnh bảo. Ngoài ra,
-cần thích hợp thêm công cụ để phát hiện được các lỗ hổng phức tạp hơn.
+cần tích hợp thêm công cụ để phát hiện được các lỗ hổng phức tạp hơn.
 
 Đoạn của đường ống hoạt động này dựa trên chính sách đã được cung cấp để đưa ra
 cảnh báo. Quá trình này cũng cần được cung cấp ZAP Context để có thể thực
@@ -239,12 +251,12 @@ thiết lập tài khoản, hệ thống) như hình \ref{fig:scan_stage}.
 Việc cài đặt bước này cần đem được các thông tin từ pha trước kết hợp
 với thông tin người dùng cung cấp để thực hiện. Các Addons tương đối độc
 lập nên thông tin đầu ra của từng Addons là khác nhau và không ổn định,
-các thông tin đầu ra được thu thập, chuẩn hóa và đưa lại vào trong AVA
+các thông tin đầu ra được thu thập, chuẩn hóa và đưa lại vào trong NAF
 để trực quan hóa thông tin \ref{fig:scan_result}.
 
 \begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/scan_result.png}
-	\caption{Kết quả crawl}
+	\caption{Kết quả thu thập thông tin}
 	\label{fig:scan_result}
 \end{figure}
 
@@ -257,7 +269,7 @@ hiện qua các công cụ rò quét thông thường. Nuclei là một công c�
 cho các trường hợp phức tạp và thường được các kĩ sư an toàn thông tin sử dụng cho
 trường hợp này.
 
-Để thích hợp được Nuclei vào công cụ, cần xây dựng một API giao tiếp với Nuclei. Do
+Để tích hợp được Nuclei vào công cụ, cần xây dựng một API giao tiếp với Nuclei. Do
 được xây dựng từ ngôn ngữ Go nên Nuclei là một tập tin khởi chạy nhị phân và cần bắt
 lấy đầu và chuẩn và đầu ra chuẩn để lấy được dữ liệu. Dữ liệu đầu vào cũng cần được
 chuẩn hóa từ dạng JSON vào trong hệ thống, đưa thành các cảnh báo đã được xác minh.
@@ -274,7 +286,7 @@ Trong đó, Nuclei Parser sẽ làm đồng thời cả hai nhiệm vụ
 lắng nghe các thông tin đầu ra của Nuclei và xử lý thông tin đó gửi trả
 lại cho đường ống để cập nhật các thông tin trên thông qua API.
 
-\subsection{Thích hợp công cụ xác minh tự động}
+\subsection{Tích hợp công cụ xác minh tự động}
 
 Các công cụ xác minh tự động làm nhiệm vụ xác minh lại các cảnh bảo,
 nếu được xác minh, một Vấn đề (Issue) mới được tạo ra và được thêm vào cơ sở dữ
@@ -405,7 +417,7 @@ thuật khác với luồng hoạt động thông thường của ZAP để có 
 
 \begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/state.png}
-	\caption{Thanh trạng thái pipeline đang chạy}
+	\caption{Thanh trạng thái đường ống đang chạy}
 	\label{fig:state}
 \end{figure}
 
@@ -429,7 +441,7 @@ Các cảnh báo có thể gửi tới các tab khai thác.
 
 \begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/alert.png}
-	\caption{Quản lý alert chung của các công cụ thích hợp}
+	\caption{Quản lý cảnh bảo chung của các công cụ tích hợp}
 	\label{fig:alert}
 \end{figure}
 
@@ -446,7 +458,7 @@ UNKNOWN để tạo ra một File PDF chứa báo cáo với format định trư
 
 Ngoài việc xác minh tự động trong đường ống, các công cụ thích
 hợp còn có thể sử dụng như một công cụ khai thác tự động trong ZAP.
-Việc thích hợp sử dụng chung các thành phần chính với công cụ xác minh
+Việc tích hợp sử dụng chung các thành phần chính với công cụ xác minh
 tự động như \ref{fig:exploit}.
 
 \begin{figure}[ht!]

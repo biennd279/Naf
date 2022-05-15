@@ -259,4 +259,15 @@ khiến đây là công cụ rất hiệu quả để phát hiện các lỗ h�
 thư viện phổ biến hiện nay (tính đến tháng 05/2020 khoảng 3200 mẫu).
 
 
+\section{Xác minh lỗ hổng Web}
+
+Việc xác minh lỗ hổng thường được thực hiện bởi các nhân viên kiểm thử an ninh ứng dụng Web. Để xác minh là lỗ hổng, người kiểm thử phải đưa ra các bằng chứng để chứng minh lỗ hổng đó có tồn tại hay không. Hiện nay, phổ biến nhất là đưa ra bằng chứng khái niệm (Proof-Of-Concept), hoặc bằng chứng khai thác (Proof-Of-Exploit).
+\begin{description}
+	\item[Bằng chứng khái niệm] Đưa ra các thông tin về đường dẫn, tham số, vector tấn công và chi tiết cách tái tạo lại lỗ hổng.
+	\item[Bằng chứng khai thác] Đưa ra các thông tin của hệ thống được coi là nhạy cảm, chỉ có thể lấy được nếu khai thác các lỗ hổng.
+\end{description}
+
+Đối với cách đưa ra bằng chứng khái niệm, đây là cách phổ biến nhất được sử dụng để chứng minh là lỗ hổng. Thông thường khi thực hiện thủ công, việc này sẽ được coi như là lỗ hổng được chứng minh bởi người tham gia kiểm thử trong giai đoạn xác minh lỗ hổng. Với các công cụ rà quét tự động, cách này vẫn hiệu quả đối với các lỗ hổng phía máy khách khi mà dữ liệu sẽ được thực thi như nhau tại các máy khách. Tuy nhiên, đối với các lỗ hổng phía máy chủ, các công cụ rà quét tự động do thường các công cụ sẽ cố gắng lấy được lỗ hổng lớn nhất dù không đủ dữ kiện chứng minh đó là lỗ hổng thực sự, do đó sẽ có trường hợp dương tính giả. Lúc này việc, xác minh cần được thực hiện thủ công.
+
+Đối với cách đưa ra bằng chứng khai thác, thường chỉ được sử dụng được yêu cầu thực hiện như trong các cuộc diễn tập Redteam hoặc sử dụng trong các công cụ rà quét tự động như Invicti với mục tiêu: "thay vì cố gắng đưa ra các thông tin khả nghi thì các công cụ sẽ cố gắng khai thác và đưa các thông tin nhạy cảm từ việc khai thác đó". Rõ ràng, với cách này, chỉ khi lỗ hổng tồn tại thì các thông tin nhạy cảm này mới được khai thác. Do đó đảm bảm rằng lỗ hổng tồn tại. Tuy nhiên, số loại lỗ hổng có thể sử dụng bằng cách này chỉ tồn tại là các lỗ hổng xếp mức nguy hiểm như OS Command Injection, SQL Injection,\ldots và thời gian thực thi sẽ tốn thời gian hơn nhiều lần so với cách đưa ra bằng chứng khái niệm.
 \end{document}
