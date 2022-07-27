@@ -3,70 +3,22 @@
 
 \begin{document}
 
-Đối với bất kỳ sản phẩm phần mềm nào, việc đảm bảo an toàn an ninh, khắc phục và vá các lỗ hổng cũng cần phải được thực hiện bởi nhà phát triển, cung cấp sản phẩm. Các phần mềm hệ thống, như các hệ điều hành, các chương trình điều khiển thiết bị, các chương trình tiện ích,\ldots thông thường là những sản phẩm đại chúng, được phát triển bởi những doanh nghiệp lớn, chuyên nghiệp, có uy tín nên thời gian thời gian vá lỗ hổng nhanh và kịp thời trước khi các cuộc tấn công xảy ra. Do đó các hệ thống sẽ an toàn trước các lỗ hổng khi được cập nhật liên tục.
+Những kẻ tấn công bằng nhiều cách có thể cài đặt các phần mềm độc hại trên máy nạn nhân để có được quyền truy cập, thực hiện các hành vi xâm phạm dữ liệu cá nhân hay dữ liệu nhạy cảm, phá hoại hệ thống hoặc sử dụng vào những mục đích xấu khác. Người dùng thường có thể dễ dàng nhận ra mối đe dọa từ những tệp thực thi, ngoài ra nhận thức về mối nguy hiểm từ các tài liệu Microsoft Office cũng ngày càng tăng cao. Tuy nhiên, bỏ qua sự phức tạp về định dạng cấu trúc tệp PDF, người dùng có xu hướng coi các tệp PDF là tài liệu vô hại.
 
-% Đối với hệ thống, việc đảm bảo an ninh sẽ phải phụ thuộc vào
-% nhà cung cấp sản phẩm, dịch vụ được sử dụng. Các lỗ hổng của hệ thống
-% thường chỉ được công khai sau khi đã có các bản vá. Với lượng nhân sự bảo
-% mật lớn, chuyên nghiệp nên thường thời gian vá lỗ hổng nhanh và kịp thời
-% trước khi các cuộc tấn công xảy ra, do đó các hệ thống sẽ an toàn trước
-% các lỗ hổng khi được cập nhật liên tục.
+Hiện nay, lợi dụng các lỗ hổng bảo mật, các trình đọc tài liệu PDF đang là mục tiêu của các kẻ tấn công mạng. Điển hình với trình đọc PDF Acrobat Reader, từ năm 1999 tới nay, đã có tới 298 lỗ hổng được phát hiện theo thống kê của CVE Details.
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/img2_acrobatcve.png}
+	\caption{Biểu đồ các lỗ hổng của trình đọc PDF Acrobat Reader theo các năm}
+	\label{fig:component}
+\end{figure}
 
-Trái lại, các ứng dụng Web thường chỉ được bảo trị bởi nhà phát triển Web -
-là các đơn vị nhỏ và vừa không có hoặc ít có khả năng phát hiện và vá được các lỗ hổng trong thời gian ngắn. Phần lớn các lỗ hổng đó liên quan đến việc không chú trọng đến việc đảm bảo an ninh trong thời gian phát triển ứng dụng. Một số báo cáo năm 2019 chỉ ra rằng khoảng 82\% lỗ hổng nằm trong mã nguồn và hầu hết các trang web đều có lỗ hổng mức nghiêm trọng.
 
-Các cuộc kiểm thử xâm nhập là một phần không thể thiếu để nhận được cảnh báo an ninh trong các sản phẩm. Với một cuộc kiểm thử xâm nhập, một quy trình đặc trưng có thể có các bước sau đây
-
+Trong khóa luận này, em sẽ trình bày một số phương pháp để phát hiện các tệp PDF độc hại, trong đó các đặc trưng được trích xuất từ tài liệu PDF sẽ được sử dụng để xây dựng bộ phân loại học máy tự động phát hiện tài liệu PDF độc hại, thông qua các chương sau:
 \begin{description}
-	\item [Thu thập thông tin] thu thập các thông tin về mục tiêu như thông tin về hệ thống, ứng dụng.
-	\item [Khảo sát] từ các thông tin bên trên, tiếp tục khảo sát về hạ tầng, các dịch vụ đang sử dụng từ các nguồn trên Internet.
-	\item [Khám phá và rà quét] với mỗi trang Web cụ thể sẽ thực hiện khám phá và rà quét các lỗ hổng để thu thập được lượng lớn điểm khả nghi là lỗ hổng nhất.
-	\item [Chỉ thị các lỗ hổng] xác minh lại và chỉ ra lỗ hổng bảo mật có tồn tại hay không và đánh giá tác động của nó.
-	\item [Khai thác và hậu khai thác] đối với một số cuộc tấn công sẽ có yêu cầu khai thác và hậu khai thác lỗ hổng để chỉ ra ảnh hưởng trong trường hợp bị tấn công.
-	\item [Duyệt và báo cáo] tổng hợp lỗ hổng, đảm bảo chất lượng của báo cáo và gửi lại báo cáo cho đơn vị.
+	\item [Chương 1] Kiến thức nền tảng về định dạng tài liệu PDF, kỹ thuật sử dụng trong tài liệu PDF độc hại, từ đó đưa ra phương pháp phát hiện phần mềm độc hại.
+	\item [Chương 2] Đi sâu vào các phương hướng trích xuất đặc trưng hiện nay, gồm các đặc trưng dựa trên từ khóa, cấu trúc tài liệu và cuối cùng là dựa trên mã nhúng
+	\item [Chương 3] Thực hiện thí nghiệm trích xuất đặc trưng được đề xuất ở chương 2, từ đó xây dựng bộ phân loại và đánh giá kết hợp các đặc trưng khác nhau
+	\item [Chương 4] Thực hiện thí nghiệm xây dựng mô hình học máy không gán nhãn độc sai. Chứng minh qua lập luận và kết quả thí nghiệm trên các tập dữ liệu khác nhau.
+	\item [Kết luận] Đánh giá kết quả đạt được, hạn chế và khó khăn gặp phải, và cuối cùng đề xuất các hướng mới để phát triển đề tài.
 \end{description}
-
-Trong đó, các bước như thu thập thông tin, khảo sát, khám phá và rà quét hiện nay đã được tự động hóa phần lớn bằng các công cụ tự động. Tuy nhiên, để các lỗ hổng được đánh giá là có tồn tại hay không thì cần được xác minh lại bằng phương pháp thủ công, làm tốn lượng lớn thời gian. Tuy nhiên, với một số lỗ hổng nghiêm trọng có thể chỉ ra ngay được tính đúng đắn của lỗ hổng và tác động của nó tới hệ thống như SQL Injection, Command Injection,\ldots
-
-Do đó, nếu có thể tích hợp các công cụ này vào trong quá trình kiểm thử xâm nhập sẽ giúp giảm được thời gian xác minh các lỗ hổng này, đưa ra được tác động của nó.
-
-Nắm được điều này, trên thị trường đã có các công cụ tự động sử dụng cơ
-chế cung cấp bằng chứng khai thác (Proof-of-Exploit) để đưa ra các báo cáo có độ tin cậy cao trong thời gian ngắn, điển hình là Invicti (Netsparker). Với công cụ thương mại Invicti cho phép xác minh tự động các lỗ hổng và cho phép sinh ra bằng chứng khai thác các lỗ hổng điển hình như sau
-\begin{itemize}
-	\item SQL Injection
-	\item Boolean SQL Injection
-	\item Blind SQL Injection
-	\item Remote File Inclusion (RFI)
-	\item Command Injection
-	\item Blind Command Injection
-	\item XML External Entity (XXE) Injection
-	\item Remote Code Evaluation
-	\item Local File Inclusion (LFI)
-	\item Server-side Template Injection
-	\item Remote Code Execution
-	\item Injection via Local File Inclusion
-\end{itemize}
-
-Open Web Application Security Project (OWASP) là một tổ chức phi lợi nhuận quốc tế chuyên cung cấp thông tin về bảo mật ứng dụng web. OWASP thường đưa ra các khuyến cáo cho từng loại lỗ hổng về độ nguy hiểm và cách phòng, chống trong thực tế. OWASP Top 10 là báo cáo đánh giá các loại lỗ hổng theo danh mục, được xếp hạng theo độ quan trọng nhất được cập nhật thường xuyên bởi một nhóm chuyên gia đến từ nhiều quốc gia, tổ chức trên toàn cầu. OWASP Top 10 thường được sử dụng làm tiêu chuẩn cho việc đánh giá an toàn thông tin ở các tổ chức tổ chức.
-
-Năm 2021, OWASP tiếp tục được cập nhật thêm so với lần cuối cùng là năm 2017. Báo cáo được liệt kê với 10 danh mục sau
-\begin{description}
-	\item[A01] Broken Access Control
-	\item[A02] Cryptographic Failures
-	\item[A03] Injection
-	\item[A04] Insecure Design
-	\item[A05] Security Misconfiguration
-	\item[A06] Vulnerable and Outdated Components
-	\item[A07] Identification and Authentication Failures
-	\item[A08] Software and Data Integrity Failures
-	\item[A09] Security Logging and Monitoring Failures
-	\item[A10] Server Side Request Forgery (SSRF)
-\end{description}
-Với việc hợp nhất các lỗ hổng, thay đổi danh mục, xếp hạng có nhiều sự thay đổi như việc đưa danh mục Broken Access Control và Cryptographic Failures lên đầu thay cho Injection cho thấy việc các chuyên gia nhận thấy sự quan trọng của việc bảo mật thông tin so với các bảng xếp hạng trước đây. Tuy nhiên, các danh mục Injection vẫn luôn đứng hạng đầu do sự phổ biến của việc không kiểm soát đầu vào của người dùng dẫn đến trình duyệt hoặc máy chủ có thể thực thi câu lệnh có hành vi bất thường.
-
-Các lỗ hổng Injection ở phía máy chủ dễ dàng xác minh và đánh giá tự động ảnh hưởng tới ứng dụng Web bằng cách đưa ra các bằng chứng về việc khai thác các lỗ hổng đó trên máy chủ. Tuy nhiên với các lỗ hổng Injection ở phía máy khách thường dễ được rà quét tự động bằng cách cung cấp đường dẫn nhưng lại rất khó đánh giá được tự động tác động do cần có một kịch bản cụ thể và thông tin nghiệp vụ cụ thể để xác minh.
-
-OWASP Zed Attack Proxy (ZAP) một công cụ bảo mật mã nguồn mở được phát triển và duy trì bởi cộng đồng với OWASP là tổ chức bảo hộ. ZAP là một công cụ phổ biến được sử dụng trong quá trình kiểm thử xâm nhập các ứng dụng Web do khả năng làm việc tự động với quét lỗ hổng thụ động và quét lỗ hổng chủ động với tính tự động cao.
-
-Với việc bổ sung các công cụ tự động xác minh, khai thác như SQLMap, Commix, Tplmap,\ldots vào trong ZAP, sẽ khiến quá trình kiểm thử sử dụng ZAP giảm được thời gian xác minh lỗ hổng và cũng có thể đưa ra được bằng chứng về việc khai thác như công cụ Invicti. Các thử nghiệm cho thấy, công cụ NAF được xây dựng trong phạm vi khóa luận này, tuy rằng việc phát hiện lỗ hổng thông qua công đoạn rà quét chưa thực sự tốt như Invicti khi mà vẫn tồn tại các lỗ hổng mà NAF không thể phát hiện do phụ thuộc vào các luật của cộng đồng phát triển. Nhưng NAF đã xác minh được số lượng các loại lỗ hổng gần với các loại lỗ hổng mà Invicti có thể xác minh và có thể cung cấp chứng khai thác tương đương các loại lỗ hổng, tốt hơn với các loại lỗ hổng như Server-side Template Injection.
 \end{document}
