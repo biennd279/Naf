@@ -2,272 +2,210 @@
 \documentclass[./../main.tex]{subfiles}
 
 \begin{document}
-Hiện nay, có rất nhiều kĩ thuật tấn công vào ứng dụng Web bao gồm cả phía
-máy chủ và phía máy khách. Dưới đây mà một số lỗ hổng được trình bày trong
-phạm vi được khai thác trong khóa luận.
-
-\subsection{SQL Injection}
-
-Với các ứng dụng Web hiện nay, việc lưu trữ dữ liệu thường được lưu tại
-cơ sở dữ liệu. Các cơ sở dữ liệu đến ngày nay vẫn là một cơ sở dữ liệu
-phổ biến do sự tin cậy và tốc độ của chúng. Để truy vấn được đến các dữ
-liệu này, các máy chủ Web cần sử dụng các truy vấn SQL để lấy dữ liệu đến
-người dùng. Tuy nhiên, sự không kiểm soát các đầu vào của người dùng có
-thể khiển các câu lệnh truy vấn SQL có thể bị thay đổi để thực thi các câu
-lệnh bất thường làm lộ thông tin Cơ sở dữ liệu hoặc tệ hơn nữa làm cho cơ
-sở dữ liệu mất quyền kiểm soát.
-
-Ví dụ với ngôn ngữ PHP dưới đây
-\begin{lstlisting}[language=php, caption=Lỗ hổng SQL Injection]
-    // The article parameter is assigned to $article
-    // variable without any sanitization or validation
-    $articleid = $_GET['article'];
-    // The $articleid parameter is passed as part of
-    // the query
-    $query = "SELECT * FROM articles WHERE articleid = $articleid";
-\end{lstlisting}
-Khi người dùng tùy chỉnh tham số `article' thành các câu lệnh dạng như
-`1 or 1=1-- -' sẽ khiến vô tình dữ liệu của toàn bộ bảng `article' được
-đưa ra ngoài.
-
-Không chỉ tại câu lệnh truy vấn đó, các câu lệnh có thể sử dụng để lấy toàn
-bộ cơ sở dữ liệu thậm chí là đặt cửa hậu để tấn công về sau.
-
-Hiện nay các kĩ thuật tấn công rất đang dạng như boolean-based blind,
-time-based blind, error-based, UNION query-based, stacked queries and
-Out-of-band.
-
-\subsection{OS Command Injection}
-OS Commnad Injection là lỗ hổng cho phép thực thi các câu lệnh
-của hệ điều hành trái phép. Nguyên do cũng đến từ việc cho phép người dùng
-nhập trực tiếp hoặc xử lý không hết hoàn toàn các câu lệnh thực thi trên
-máy chủ Web. Các lỗ hổng này thường dẫn đến thực thi lệnh trái phép trên
-máy chủ Web.
-Ví dụ với ngôn ngữ PHP dưới đây về một chương trình giúp phân giải tên miền
-thông qua câu lệnh `host' của Linux
-
-\begin{lstlisting}[language=php, caption=Lỗ hổng OS Command Injection]
-    echo shell_exec("host {$_POST["site"]}");
-\end{lstlisting}
-
-Với các tham số của `site' như `google.com; cat /etc/pasword' sẽ khiển chương trình thực thi câu lệnh `host google.com; cat /etc/passwd' ở hệ điều hành làm lộ thông tin máy chủ.
-
-\subsection{Remote Code Evaluation}
-Remote Code Evaluation là lỗ hổng cho phép thực thi các đoạn mã trái phép trên trình phân tích cú pháp của ngôn ngữ - thường xảy ra với các ngôn ngữ thông dịch. Các đầu vào khi không được kiểm soát hoàn toàn có thể khiển các đoạn mã được thực thi trái phép. Các lỗ hổng dạng này cũng thường dẫn đến thực thi lệnh trái phép trên máy chủ Web.
-
-Một ví dụ về việc thực thi `eval()' trong PHP dẫn đến lỗ hổng
-
-\begin{lstlisting}[language=php, caption=Lỗ hổng Remote Code Evaluation]
-    eval ("echo ".$_REQUEST["parameter"].";");
-\end{lstlisting}
-
-Với tham số `parameter' là `1;phpinfo();' khiến câu truy vấn này đưa ra thông tin máy chủ Web của thông tin PHP do hàm `phpinfo()' được thực thi.
-
-\subsection{Server Side Template Injection}
-Tương tự với Remote Code Evaluation, Server Side Template Injection cũng cho phép thực thi các đoạn mã trên trình phân tích của Template Engine. Template Engine là các phần thực hiện việc phân tích cú pháp, thực thi các đoạn mã để sinh ra được nhiều đầu ra khác nhau thông qua một bản mẫu chỉ cần thay đổi tham số đầu vào. Lỗ hổng này cũng thường dẫn đến việc thực
-thi lệnh trái phép trên máy chủ Web.
-
-Ví dụ đoạn mã sau
-
-\begin{lstlisting}[language=php, caption=Lỗ hổng Server Side Template Injection]
-    $output = $twig->render($_GET['custom_email'],  array("first_name" => $user.first_name) );
-\end{lstlisting}
-
-Ba lỗ hổng OS Command Injection, Remote Code Evaluation và Server Side Template Injection có vector khai thác và mức độ tác động tương tự nhau nên trong một số trường hợp được gọi chung với cái tên Code Injection.
-
-\subsection{Local File Inclusion và Directory Traversal}
-Local File Inclusion là lỗ hổng làm cho máy chủ làm lộ hoặc thực thi các
-nội dung tập tin trên máy chủ đó. Trong các trường hợp như PHP, khi được
-phép tải lên tùy ý tập tin lên thì lỗ hổng này có thể dẫn đến thực thi lệnh
-trái phép trên máy chủ Web.
-
-Ví dụ như đoạn mã sau:
-
-\begin{lstlisting}[language=php, caption=Lỗ hổng Local File Inclusion]
-    $file = $_GET['file'];
-    include($file);
-\end{lstlisting}
-
-Với ví dụ trên, khi người dùng được phép tải lên tập tin tùy ý sẽ khiến cho có thể thực thi bất kì đoạn mã nào do PHP cho phép xử lý động các đoạn mã
-khi được gọi câu lệnh `include'. Ví dụ như tham số `file' là `/var/www/upload/evil.php' Với `evil.php' là tập tin có chứ các đoạn mã thực thi lệnh
-trái phép.
-
-Kể cả khi không được tải lên tùy ý, lỗ hổng Local File Inclusion cũng
-thường được kết hợp với Directory Traversal, cho phép tùy ý đọc tập tin
-tại vị trí không được phép để làm lộ các thông tin nhạy cảm của hệ thống.
-
-Ví dụ với tham số được chèn `../../etc/passwd' sẽ khiến thông tin về tập
-tin `/etc/passwd' được trả về cho người dùng.
-
-\subsection{Remote File Inclusion}
-
-Tương tự như Local File Inclusion, Remote File Inclusion cho phép máy chủ
-làm lộ hoặc thực thi các tập tin nhưng với nội dung từ xa. Thường thì các
-dẫn đến thực thi lệnh trái phép trên máy chủ Web.
-
-Tiếp tục với ví dụ của lỗ hổng Local File Inclusion, khi tùy chọn `php allow{\_}url{\_}fopen' được bật sẽ cho phép PHP tải về các nội dung trong URL. Nếu kẻ tấn công đưa vào tham số `file' là `http://attacker.example.com/evil.php' thì kẻ tấn công có thể thực thi lệnh trên máy chủ PHP.
-
-\section{Các công cụ rà quét lỗ hổng}
-
-\subsection{Zed Attack Proxy (ZAP)}
-OWASP Zed Attack Proxy (thường được gọi là  ZAP hay ZAProxy) là công cụ mã nguồn mở,
-công cụ cho phép các các kỹ sư an toàn thông tin tìm kiếm được lỗ hổng một cách tự
-động/bán tự động/thủ công thông qua cơ chế “middle-in-the-middle-proxy” giúp người
-dùng đứng giữa ứng dụng Web để thực hiện kiểm thử qua các plugin trong được xây dựng
-trong cộng đồng.
-
-Điểm mạnh của ZAP là ứng dụng được viết bằng Java nên có thể triển khai trên
-nhiều nền tảng và có cộng đồng phát triển thường xuyên cập nhập các tri thức
-liên quan đến lỗ hổng hiện hành.
-
-\subsubsection{ZAP Core}
-
-ZAP Core là thành phần lõi cung cấp toàn bộ API giao tiếp với bên ngoài cho các
-plugin (bao gồm các luật, Addon) trong ZAP. Các plugin sẽ không trực tiếp giao tiếp
-với môi trường bên ngoài mà sẽ sử dụng các API này để  gửi và nhận yêu cầu, đọc ghi
-dữ liệu, ghi cơ sở dữ liệu\ldots Thành phần chính ZAP Core được phát triển từ dự án
-Paros Proxy - là một Interceptor Proxy thường được sử dụng để để thử các ca kiểm thử
-xâm nhập.
-
-Các thành phần đáng kể nhất của ZAP Core phải kể đến là: Proxy, HttpSender, Session,
-Site Map, Scanner, Context và các Addon Core. Proxy chính là interceptor được kế thừa
-từ Paros, cho phép nhặn gửi-nhận các yêu cầu, phản hồi tới và đi qua Proxy. Thông
-thường, các trình duyệt sẽ sử dụng thông qua proxy này để thực hiện kiểm thử. Http
-Sender sẽ quản lý việc gửi và nhận của các thông báo HTTP. Session và Site Map sẽ quản lý
-lượng đầu ra và đầu vào các thông báo HTTP, để xây dựng thành một cây thông tin cung
-cấp các thành phần khác. Scanner cung cấp một khung để các luật thực hiện xác định
-lỗ hổng trên các thông báo HTTP. Context cung cấp ngữ cảnh cho việc rà quét, xác định
-lỗ hộng theo người dùng.
-
-Ngoài ra, một số Addon sẽ được phát triển như một phần của ZAP Core thay vì
-là các phần mở rộng thông thường và cũng được các Addon khác sử dụng như
-một phần của ZAP Core.
-
-\subsubsection{ZAP Addons}
-Điểm đặc biệt của ZAP là cơ chế mở rộng bằng ZAP Addons cho phép cộng đồng
-xây dựng được các phần mở rộng riêng cho mình trên ZAP mà không cần sửa
-các phần liên quan đến ZAP Core, đảm bảo sự độc lập tránh sự mâu thuẫn giữa
-các ZAP Addon hoặc ZAP Addon với chính ZAP, đồng thời cũng đảm bảo được các
-phần được bảo trị độc lập liên tục.
-
-\subsubsection{Addon Spider và Addon Spider Ajax}
-Spider là một trong các Addons chính, được phát triển để thu thập và phát
-hiện được các thành phần đơn trong Website như các URL, hành động,...được gọi là các
-Site Node. Site Node cung cấp sẽ thông tin cho người dùng về thông tin
-Website đồng thời cũng cung cấp các thông tin về Website cho các Addon
-khác thông qua các API của ZAP.
-
-Spider sẽ thu thập dựa trên cây DOM của Website, do đó Spider này sẽ chỉ nhận
-được các thông tin từ web tĩnh. Để lấy được các thông tin trong việc chạy
-JavaScript thì cần có một Addon khác là Ajax Spider. Ajax spider sử dụng
-Selenium như một trình web để duyệt web ảo và thực hiện thu thập các thông
-tin về Site Node.
-\subsubsection{Addon Passive Scan và Active Scan}
-Là các Addons chính, được sử dụng để chạy các kiểm thử dạng được lập trình
-sẵn thành các plugin đặc biệt gọi là luật(Rule). Các luật sẽ dựa theo thông
-tin của hệ thống cung cấp để chạy các ca kiểm thử và phân tích kết quả dựa
-trên các hành vi của Website để đưa ra các cảnh báo (Alert) cho người dùng.
-
-Passive Scan sẽ chỉ sử dụng các phản hồi của proxy để lấy tông tin, thường
-các lỗ hổng liên quan đến lộ thông tin sẽ được phát hiện bằng trình quét này.
-
-Active Scan sẽ chủ động gửi các truy cấn để phát hiện ra lỗ hổng dựa vào
-các hành vi của Web trả lại. Nhược điểm của trình quét này sẽ gửi số lượng
-lớn và các truy vấn tới mọi Site Node của Website có thế dẫn đến các hành vi
-không mong muốn đối với Website mục tiêu.
-
-Các luật liên tục được cộng đồng duy trì và phát triển theo các lỗ hổng
-đã xuất hiện và hiện hành.
-
-\subsection{Invicti}
-
-Invicti hay trước đây là NetSparker là một công cụ rà quét lỗ hổng tự động
-được xây dựng bằng cách cung cấp các bằng chứng về việc khác thác lỗ hổng luôn
-trong quá trình rà quét. Điều này khiến cho các lỗ hổng thu thập được trong
-quá trình rà quét có độ tin cậy cao hơn rất nhiều so với các công cụ
-rà quét tự động khác. Ngoài ra, các thành phần khác
-như tổ chức quét tự động, thiết lập cầu hình quét, sinh báo cáo và cung cấp
-công cụ khai thác/hậu khai cũng giúp cho Invicti là một công cụ được sử dụng
-nhiều trong các doanh nghiệp.
-
-\subsection{Các công cụ khác}
-
-Trên thị trường, hiện nay còn có rất nhiều công cụ được sử dụng trong việc
-rà quét lỗ hổng như Acunetix và BurpSuite.
-
-Acunetix là cũng là một công cụ rà quét tự động được sử dụng phổ biến trong
-doanh nghiệp. Điểm nổi trội của Acunetix là sử dụng công nghệ AcuSensor cho
-phép kiểm thử bằng cách thực thi ngay tại máy chủ Web mã phía máy chủ để cung
-cấp thêm thông tin cho trình phân tích. Công nghệ này được giới thiệu rằng có
-thể đưa ra các lỗ hổng có tính xác thực đến gần 100\% các lỗ hổng như SQL Injection,
-Code Injeciton, File Inclusion\ldots
-
-BurpSuite là một trình quét sử dụng dựa trên cơ chế "middle-in-the-middle-proxy"
-tương tự ZAP nhưng sử dụng nhiều các thành phần được phát triển bởi
-các nhà nghiên cứu của BurpSuite với kì vọng đem lại tất cả các tính năng
-thông qua chúng. BurpSuite thường được sử dụng với các nhà nghiên cứu và săn
-tiền thưởng.
-
-\section{Các công cụ khai thác lỗ hổng}
-
-\subsection{Công cụ SQL Map}
-SQLMap là Một công cụ mã nguồn mở được sử dụng để tự động quá trình xác
-định, khai thác và hậu khai thác các lỗ hổng về SQL Injection.
-
-SQLMap được cộng đồng phát triển với một engine có khả năng phát hiện các
-lỗ hổng ở một miền lỗ hổng cực kỳ rộng và cho rất nhiều hệ thống khác nhau.
-Đồng thời nó cũng có các công cụ khai thác dựa trên các lỗ hổng được phát
-hiện trên dump cơ sở dữ liệu hiệu quả.
-
-Hiện nay SQLMap, hỗ trợ gần như các cơ sở dữ liệu phổ biển như MySQL,
-Oracle, PostgreSQL, Microsoft SQL Server, Microsoft Access, IBM DB2,
-SQLite, Firebird, Sybase, SAP MaxDB, Informix, MariaDB, MemSQL, TiDB,
-CockroachDB, HSQLDB, H2,... với rất nhiều kỹ thuật như boolean-based blind,
-time-based blind, error-based, UNION query-based, stacked queries and
-out-of-band. Ngoài ra, SQLMap giúp liệt kê bằng các thông tin của cơ
-sở dữ liệu nếu users, password hashes, privileges, roles, databases,
-tables and columns.
-
-\subsection{Công cụ Commix}
-Commix (viết tắt của command injection exploiter) là một công cụ mã nguồn
-mở được sử dụng để tự động xác định, khai thác và hậu khai thác các lỗ
-hổng về Command Injection. Một số lỗ hổng liên quan đến
-Remote Code Evaluation cũng có thể được phát hiện và khai thác bằng công
-cụ này.
-
-Commix cũng được cộng đồng phát triển để có khả năng khai
-thác một miền rộng các lỗ hổng trên nhiều hệ điều hành khác nhau
-và có thể thực hiện hậu khai thác ở đây.
-\subsection{Công cụ Tplmap}
-Tplmap là một công cụ mã nguồn mở được sử dụng để xác minh và khai
-thác các lỗ hổng liên quan đến Code Injection and Server-Side Template
-Injection.
-
-
-Hơn 15 ngôn ngữ, template engine, có thể khai thác với nhiều kỹ thuật
-khác nhau kể các các lỗ hổng dạng mù (blind).
-
-\subsection{Công cụ Nuclei}
-Một công cụ mã nguồn mở được sử dụng để rà quét lỗ hổng theo mẫu rà quét (Template).
-Đối với các lỗ hổng phức tạp cần dạng các mắt xích của nhiều lỗ hổng để
-khai thác thì các công cụ rò quét thông thường không thể phát hiện được đăc biệt
-các dạng CVE. Nuclei được phát triển để có thể mô hình được tất cả các lỗ
-hổng kể cả các lỗ hổng phức tạp thành qua mẫu rà quét.
-
-Số lượng mẫu rà quét được các nhà nghiên cứu bảo mật và cộng đồng cập nhật liên tục
-khiến đây là công cụ rất hiệu quả để phát hiện các lỗ hổng trong các sản phẩm,
-thư viện phổ biến hiện nay (tính đến tháng 05/2020 khoảng 3200 mẫu).
-
-
-\section{Xác minh lỗ hổng Web}
-
-Việc xác minh lỗ hổng thường được thực hiện bởi các nhân viên kiểm thử an ninh ứng dụng Web. Để xác minh là lỗ hổng, người kiểm thử phải đưa ra các bằng chứng để chứng minh lỗ hổng đó có tồn tại hay không. Hiện nay, phổ biến nhất là đưa ra bằng chứng khái niệm (Proof-Of-Concept), hoặc bằng chứng khai thác (Proof-Of-Exploit).
+\section{Định dạng tệp PDF}
+Tệp pdf là một trong những định dạng phổ biến nhất để lưu trữ tài liệu trên toàn thế giới. Năm 1993, PDF được Adobe Systems định nghĩa và đến năm 2008, PDF đã trở thành một tiêu chuẩn mở được phát hành dưới chuẩn ISO 32000-1.
+\subsection{Các đối tượng tệp}
+Cấu trúc của tệp PDF bao gồm các đối tượng liên kết với nhau trong một cấu trúc cây. Những đối tượng này được chia thành ba loại, gồm có các đối tượng đơn giản, các đối tượng ghép và đối tượng độc lập.
 \begin{description}
-	\item[Bằng chứng khái niệm] Đưa ra các thông tin về đường dẫn, tham số, vector tấn công và chi tiết cách tái tạo lại lỗ hổng.
-	\item[Bằng chứng khai thác] Đưa ra các thông tin của hệ thống được coi là nhạy cảm, chỉ có thể lấy được nếu khai thác các lỗ hổng.
+	\item[Đối tượng đơn giản] Đây là ...
+	      \begin{itemize}
+		      \item Boolean lưu giá trị true/false
+		      \item Number đối tượng số,
+		      \item String các xâu ký tự với kích thước tối đa 65535 bytes;
+		      \item Name là các đối tượng từ khóa được định nghĩa sẵn trong tiêu chuẩn PDF, theo sau bởi ký tự '/', ví dụ '/kids' xác định các đối tượng con, '/filter' chỉ định bộ lọc được sử dụng,...
+		      \item Indirect reference là các tham chiếu tới các đối tượng độc lập.
+	      \end{itemize}
+	\item[Đối tượng ghép] Đây là ...
+	      \begin{itemize}
+		      \item Array mảng 1 chiều các đối tượng được sắp xếp trong cặp ký tự '[]'.
+		      \item Dictionary giống như một danh sách lưu trữ các cặp từ khóa - giá trị, được đặt trong cặp ký tự  '<<>>'. Từ khóa phải là một đối tượng Name còn giá trị thì có thể là bất kể đối tượng nào. Mỗi từ khóa chỉ xuất hiện 1 lần duy nhất trong một đối tượng dictionary.
+		      \item Stream đối tượng stream giống như một đối tượng string, gồm một chuỗi các bytes, nhưng khác ở việc không giới hạn về độ dài. Do đó đối tượng stream có khả năng chứa một lượng lớn dữ liệu như hình ảnh, các thông tin mô tả trang,... Stream được đặt trong cặp từ khóa 'stream endstream'.
+	      \end{itemize}
+	\item[Đối tượng độc lập]
+	      Các đối tượng độc lập có định danh là các cặp (number object, generation object) ứng với số thứ tự đối tượng và thế hệ của đối tượng. Các đối tượng khác có thể tham chiếu tới qua định danh này. Các đối tượng độc lập được định nghĩa bên trong cặp từ khóa 'obj endobj'.
+
 \end{description}
 
-Đối với cách đưa ra bằng chứng khái niệm, đây là cách phổ biến nhất được sử dụng để chứng minh là lỗ hổng. Thông thường khi thực hiện thủ công, việc này sẽ được coi như là lỗ hổng được chứng minh bởi người tham gia kiểm thử trong giai đoạn xác minh lỗ hổng. Với các công cụ rà quét tự động, cách này vẫn hiệu quả đối với các lỗ hổng phía máy khách khi mà dữ liệu sẽ được thực thi như nhau tại các máy khách. Tuy nhiên, đối với các lỗ hổng phía máy chủ, các công cụ rà quét tự động do thường các công cụ sẽ cố gắng lấy được lỗ hổng lớn nhất dù không đủ dữ kiện chứng minh đó là lỗ hổng thực sự, do đó sẽ có trường hợp dương tính giả. Lúc này việc, xác minh cần được thực hiện thủ công.
 
-Đối với cách đưa ra bằng chứng khai thác, thường chỉ được sử dụng được yêu cầu thực hiện như trong các cuộc diễn tập Redteam hoặc sử dụng trong các công cụ rà quét tự động như Invicti với mục tiêu: "thay vì cố gắng đưa ra các thông tin khả nghi thì các công cụ sẽ cố gắng khai thác và đưa các thông tin nhạy cảm từ việc khai thác đó". Rõ ràng, với cách này, chỉ khi lỗ hổng tồn tại thì các thông tin nhạy cảm này mới được khai thác. Do đó đảm bảm rằng lỗ hổng tồn tại. Tuy nhiên, số loại lỗ hổng có thể sử dụng bằng cách này chỉ tồn tại là các lỗ hổng xếp mức nguy hiểm như OS Command Injection, SQL Injection,\ldots và thời gian thực thi sẽ tốn thời gian hơn nhiều lần so với cách đưa ra bằng chứng khái niệm.
+\subsection{Cấu trúc vật lý}
+Cấu trúc vật lý của PDF xác định cách đối tượng được lưu trữ trong tệp, cách mà chúng được truy cập và cập nhật.
+Một tệp PDF cơ bản sẽ được xây dựng bằng bốn yếu tố: header, body, bảng tham chiếu xref table và trailer. Hình \ref{fig:initstruct} thể hiện cấu trúc này.
+Cấu trúc ban đầu của PDF sẽ được thay đổi sau mỗi lần cập nhật, bằng cách thêm các sự thay đổi vào cuối của tệp, được gọi là cập nhật tăng dần.
+% figure
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{./images/initial_structure.png}
+	\caption{Cấu trúc vật lý của tệp PDF}
+	\label{fig:initstruct}
+\end{figure}
+
+\begin{description}
+	\item[Header]
+	      Header là dòng đầu tiên trong tệp PDF, xác định phiên bản tệp, được viết dưới định dạng '%PDF-version'. Ví dụ '%PDF-1.7' xác định phiên bản PDF hiện tại là 1.7.
+	      Ngoài ra, nếu tệp PDF chứa dữ liệu nhị phân, header sẽ chứa một dòng comment gồm ít nhất 4 ký tự nhị phân giúp xác định được cần xử lý dữ liệu tệp dưới dạng văn bản hay nhị phân.
+
+	\item[Body]
+	      Phần body của tệp chứa tất cả các đối tượng lưu trữ những dữ liệu sẽ hiển thị cho người dùng, được xác định từ sau phần header đến khi xuất hiện từ khóa 'xref'. Những dữ liệu trong body sau đó có thể được chỉnh sửa, và phần cập nhật sẽ được lưu trữ ở cuối tệp.
+	\item[Xref Table]
+	      Xref table hay còn được gọi là cross-reference table là một bảng tham chiếu tới các đối tượng độc lập trong tài liệu nhằm mục đích cho phép truy cập ngẫu nhiên vào các đối tượng này mà không cần đọc toàn bộ tài liệu để định vị một đối tượng cụ thể.
+	      Bảng có thể chứa 1 hoặc nhiều phần. Ban đầu, toàn bộ bảng chỉ bao gồm 1 phần duy nhất. Một phần tương ứng sẽ được thêm vào nếu tệp được thay đổi.
+	      % figure
+	      \begin{figure}[ht!]
+		      \centering
+		      \includegraphics[width=0.5\linewidth]{./images/xref_example.png}
+		      \caption{Một bảng xref trong tài liệu PDF}
+		      \label{fig:xreftable}
+	      \end{figure}
+
+	      Ở trên hình \ref{fig:xreftable}, cho thấy một ví dụ về bảng tham chiếu trong tệp PDF, gồm có 4 phần con, bắt đầu bởi dòng chứa hai giá trị số với giá trị đầu là số thứ tự của đối tượng đầu tiên, giá trị thứ hai là số lượng đối tượng trong phần con này. Ví dụ ở phần thứ 3, giá trị '21 4' cho thấy có 4 đối tượng trong phần con, được đánh số bắt đầu từ 21 đến 24. Theo sau đó là các dòng đại diện cho các đối tượng, xác định bởi một chuỗi gồm 20 byte lưu trữ địa chỉ của đối tượng (offset), số thế hệ của đối tượng và một cờ 'f' hoặc 'n. Cờ 'f' nghĩa là đối tượng vẫn tồn tại trong tệp nhưng được đánh dấu không nên được sử dụng, ngược lại, cờ 'n' xác định đối tượng đang được sử dụng.
+	\item[Trailer]
+
+	      Trailer PDF được lưu ở cuối tệp, chỉ định vị trí của bảng tham chiếu và các đối tượng đặc biệt khác, bắt đầu bởi từ khóa 'trailer' \ref{fig:trailer}.
+
+	      % figure
+	      \begin{figure}[ht!]
+		      \centering
+		      \includegraphics[width=0.5\linewidth]{./images/img_trailer_pdf.png}
+		      \caption{Một trailer trong tài liệu PDF}
+		      \label{fig:trailer}
+	      \end{figure}
+
+	      Trong đối tượng dictionary của trailer lưu trữ các giá trị:
+
+	      \begin{itemize}
+		      \item[Size] xác định số lượng đối tượng trong bảng tham chiếu (có đếm cả các đối tượng trong các phần mới cập nhật). Giá trị này phải là 1 số nguyên, và không thể là một đối tượng tham chiếu.
+		      \item[Prev] xác định địa chỉ của bảng tham chiếu được cập nhật trước đó- được sử dụng khi có nhiều bảng tham chiếu.
+		      \item[Root] tham chiếu tới một đối tượng gốc trong mô hình cấu trúc logic của PDF.
+	      \end{itemize}
+
+
+	\item[Cập nhật tăng dần]
+	      PDF được thiết kế với khả năng cập nhật tăng dần, tức là có thể cập nhật bằng cách thêm các đối tượng thay đổi vào cuối tệp PDF mà không cần phải viết lại toàn bộ tệp, mục tiêu cập nhật nhanh chóng các thay đổi nhỏ vào trong 1 tệp lớn.
+
+	      Có thể thấy trong hình dưới, tệp PDF vẫn chứa các phần header, body, xref table và trailer ban đầu. Tiếp theo sẽ có các body, xref table và trailer được thêm vào cuối tệp. Các bảng tham chiếu được bổ sung sẽ chỉ chứa các đối tượng đã bị thay đổi, thay thế  hoặc xóa. Các đối tượng bị xóa sẽ vẫn nằm trong tệp nhưng được đánh dấu với cờ 'f'.  Trong phần trailer được thêm mới sẽ có một cặp từ khóa '\textbackslash Prev' cho biết vị trí của bảng tham chiếu trước đó và cần phải kết thúc bằng ký tự kết thúc "\%\%EOF"
+
+\end{description}
+
+\subsection{Cấu trúc logic}
+
+Cấu trúc logic của tài liệu PDF chỉ ra cách các đối tượng liên kết với nhau và được tổ chức sao cho các trình đọc PDF có thể hiểu và xử lý tài liệu một cách thích hợp. Các đối tượng này được xây dựng dựa trên một mô hình phân cấp dạng cây, với nút gốc là một đối tượng catalog. [ref below fig]
+
+% figure
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{./images/logic_structure_pdf.png}
+	\caption{Mô hình phân cấp các đối tượng bên trong cấu trúc logic của tài liệu PDF}
+	\label{fig:logic_structure}
+\end{figure}
+
+\begin{description}
+	\item[Catalog]  cung cấp thông tin chung về loại đối tượng nào sẽ được hiển thị trong tệp PDF, nội dung của tài liệu và một số hướng dẫn cụ thể cho các trình đọc PDF về cách hiển thị PDF lên màn hình sau khi được mở. Dưới đây là một ví dụ về một đối tượng catalog trong tệp PDF [ref below fig]. Từ khóa 'PageMode' xác định cách tệp sẽ được hiển thị, 'OpenAction' chỉ định hành động sẽ được thực thi ngay sau khi mở tệp, và 'Pages' tham chiếu tới nút gốc của một cây các trang trong tài liệu PDF.
+	      % figure
+	      \begin{figure}[ht!]
+		      \centering
+		      \includegraphics[width=0.5\linewidth]{./images/catalog.png}
+		      \caption{Đối tượng catalog trong tài liệu PDF}
+		      \label{fig:catalog}
+	      \end{figure}
+
+	\item[Page Tree] Các trang của tài liệu PDF được liên kết thông qua một cây các trang - định nghĩa thứ tự truy cập. Sử dụng cấu trúc cây cho phép trình đọc nhanh chóng mở các trang trong tài liệu chứa hàng nghìn trang. Nút gốc của cây được chỉ định thông qua tham chiếu /Pages trong đối tượng Catalog.
+
+\end{description}
+
+\section{Một số thuật toán phân loại}
+
+Ngoài việc hiểu cấu trúc tài liệu PDF phục vụ cho việc phân tích và trích xuất những đặc trưng có giá trị thì việc huấn luyện một bộ phân loại hai lớp để phát hiện các mẫu độc hại với độ chính xác cao nhất có thể là vô cùng quan trọng. Thông thường, những mô hình phân loại sẽ được áp dụng vào tập dữ liệu một cách độc lập, từ đó xem xét mô hình nào hoạt động tốt nhất. Ở phạm vi khóa luận này, một số thuật toán phân loại được sử dụng trong các thử nghiệm, bao gồm Cây quyết định, Random Forest và LightGBM.
+
+\subsection{Cây quyết định}
+Cây quyết định là một thuật toán học máy có giám sát được sử dụng rộng rãi. Một cây quyết định sử dụng mô hình cấu trúc cây để biểu thị các dự đoán xuất phát từ một loạt các điều kiện phân tách dựa trên các đặc trưng, bắt đầu với nút gốc và kết thúc bằng một quyết định đưa ra bởi nút lá.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=\linewidth]{./images/img_cart_01_gray.png}
+	\caption{Sơ đồ cấu trúc cây trong thuật toán Cây quyết định}
+	\label{fig:img_cart_01_gray}
+\end{figure}
+
+\begin{description}
+	\item[Nút gốc] là nút bắt đầu của cây quyết định
+	\item[Nút quyết định] các nút sau nút gốc, chứa những điều kiện để phân chia tới các nút tiếp theo.
+	\item[Nút lá] nút kết thúc, chứa một nhãn duy nhất ứng với kết quả cuối cùng.
+	\item[Cây con] là các phần nhỏ của đồ thị biểu diễn cây quyết định, theo sau bởi nút gốc hoặc một nút quyết định
+\end{description}
+
+Cây quyết định phân loại bằng cách duyệt mẫu từ trên xuống dưới bắt đầu từ gốc của cây, tại mỗi nút quyết định, điều kiện sẽ được kiểm tra và mẫu sẽ được phân phối xuống các nút tiếp theo, cho đến khi đến một nút lá. Nhãn của nút lá sẽ chính là kết quả phân loại cuối cùng cho mẫu đó.
+
+Trên thực tế, thuật toán đã được sử dụng trong rất nhiều công bố về phân loại tệp PDF độc hại: Davide Maiorca và cộng sự [10], Himanshu Pareek và cộng sự [14], 15. Ngoài ra một số công cụ phát hiện PDF độc hại như Hidost [24], Lux0R [2] hay PDF Malware Slayer[] cũng sử dụng thuật toán này trong mô hình phân loại.
+
+\subsection{Random Forest}
+
+Random Forest là một thuật toán học kết hợp, bằng cách xây dựng rất nhiều các mô hình cây quyết định tạo thành rừng, mang lại một kết quả tốt hơn khi chỉ sử dụng một cây quyết định đơn lẻ. Mỗi cây quyết định trong rừng sẽ được học độc lập dựa trên một tập con ngẫu nhiên từ tập huấn luyện, và chỉ sử dụng một tập con các đặc trưng ngẫu nhiên của dữ liệu. Khi thực hiện phân loại, mẫu kiểm thử sẽ được phân loại song song trên các cây và trung bình cộng của các kết quả sẽ cho ra nhãn phân loại cuối cùng.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=\linewidth]{./images/img_rf_flow.png}
+	\caption{Quy trình phân loại dựa trên thuật toán Random Forest}
+	\label{fig:img_rf_flow}
+\end{figure}
+
+Trong thuật toán Cây quyết định, khi xây dựng cây với một độ sâu tùy ý, có thể gây nên việc mô hình khớp hoàn toàn với dữ liệu tập huấn luyện, nhưng lại mang lại kết quả kém trên các tập kiểm thử (hiện tượng overfitting). Các cây trong thuật toán Random Forest chỉ dùng một phần dữ liệu huấn luyện để học, do đó sẽ không gặp overfitting nhưng có thể gây ra underfitting - khi số tập dữ liệu không đủ hoặc số lượng đặc trưng được sử dụng quá ít, dẫn tới kết quả xấu trên cả tập huấn luyện lẫn tập kiểm thử. Tuy nhiên, kết quả của thuật toán Random Forest là sự tổng hợp từ tất cả các cây quyết định, nhờ đó, các cây sẽ bổ sung cho nhau và mang lại một kết quả phân loại tốt hơn.
+
+Thuật toán Random Forest đã được sử dụng trong các công cụ phát hiện mã độc như PDFRate, PDF Malware Slayer và LuxOR .
+
+\subsection{Kỹ thuật boosting và thuật toán LightGBM}
+Nhận thức được điểm yếu khi chỉ sử dụng một mô hình đơn lẻ như Cây quyết định, thuật toán Random Forest đưa ra một cải tiến mới khi kết hợp sử dụng mô hình trên nhiều phần dữ liệu khác nhau, huấn luyện độc lập và song song với nhau để đưa ra một kết quả tốt nhất. Đây là một ví dụ điển hình cho kỹ thuật bagging trong phương pháp học kết hợp. Ngoài ra, với phương pháp học kết hợp, một kỹ thuật được gọi là boosting cũng sẽ thực hiện xây dựng một chuỗi các mô hình trên những tập dữ liệu con khác nhau nhưng hoạt động học sẽ diễn ra một cách tuần tự. Theo đó, mô hình sau trong quá trình huấn luyện sẽ rút kinh nghiệm từ những lỗi của mô hình trước đó bằng cách cập nhật trọng số. Đầu ra của mô hình cuối cùng trong chuỗi sẽ là kết quả cuối cùng khi thực hiện phân loại.
+
+Trong phạm vi của khóa luận này, tôi đề xuất sử dụng một thuật toán boosting được phát triển bởi Microsoft là LightGBM. LightGBM viết tắt của Light Gradient Boosting Machine, là một mô hình xử lý thuật toán học kết hợp tăng cường. Mô hình này cũng sử dụng Cây quyết định để xây dựng các mô hình thành phần. Sau mỗi lần thực hiện huấn luyện trên một mô hình với một tập dữ liệu con, thuật toán sẽ cập nhật tham số của mô hình theo hướng giảm của đạo hàm hàm mất mát.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=\linewidth]{./images/compare_ensemble_methods.png}
+	\caption{So sánh các kỹ thuật được sử dụng trong mô hình sử dụng phương pháp học kết hợp}
+	\label{fig:compare_ensemble_methods}
+\end{figure}
+
+Với nhiều kỹ thuật và cơ chế phức tạp, thuật toán LightGBM mang lại một bộ phân loại mạnh mẽ, tốc độ tính toán được tối ưu, do đó cần ít thời gian xử lý hơn so với các thuật toán cùng loại khác trên các tập huấn luyện có kích thước lớn.
+
+\section{Phát hiện tài liệu PDF độc hại}
+
+Phát hiện các tệp độc hại có rất nhiều cách tiếp cận, tuy nhiên, có hai giai đoạn chính phục vụ mục đích này
+
+\begin{itemize}
+	\item Trích xuất đặc trưng
+	\item Phân tích đặc trưng và đưa ra quyết định.
+\end{itemize}
+
+
+Trong giai đoạn Trích xuất đặc trưng, các tệp PDF được xử lý và phân tích để trích xuất ra các đặc trưng cần thiết. Những đặc trưng này sẽ được thống kê và được đưa qua một bộ lọc để chọn ra những đặc trưng quan trọng trong giai đoạn Phân tích đặc trưng. Cuối cùng, một mô hình học máy sẽ được áp dụng để quyết định xem tệp đầu vào là sạch hay độc hại.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=\linewidth]{./images/img5_tax.png}
+	\caption{Phân loại các đặc trưng được sử dụng trong phát hiện tài liệu PDF độc hại}
+	\label{fig:img5_tax}
+\end{figure}
+
+
+Mô hình dưới mô tả các đặc trưng được đề xuất để phát hiện tài liệu độc hại, và tổ chức chúng theo mô hình phân loại phân cấp. Mỗi cấp độ sẽ tương ứng với từng giai đoạn trong hoạt động trích xuất đặc trưng. Mô hình được giản lược từ mô hình được giới thiệu bởi Michele Elingiusti và cộng sự trong công bố năm 2018. [ref]
+
+\subsection{Loại dữ liệu}
+Ở cấp đầu tiên, đại diện cho loại dữ liệu được trích xuất từ tài liệu PDF
+
+\begin{description}
+	\item[Siêu dữ liệu (metadata)] là tất cả những dữ liệu có thể được trích xuất từ dữ liệu “thô” của tệp PDF từ những mô tả, các mối liên hệ và cấu trúc bên trong tài liệu. Các siêu dữ liệu bao gồm các từ khóa xuất hiện trong tệp, số lượng các ký tự kết thúc tệp, tác giả, đường dẫn cấu trúc,...
+	\item [Embedded code] gồm các đoạn mã hay các tệp được nhúng vào trong tài liệu PDF, có thể kể đến một số tệp thực thi hay một số mã shellcode, điển hình và xuất hiện nhiều nhất là các mã Javascript.
+\end{description}
+
+
+\subsection{Tiền xử lý}
+Tiền xử lý cho thấy các kỹ thuật xử lý được sử dụng ứng với từng loại dữ liệu đầu vào, phục vụ cho mục đích cụ thể là đưa ra những đặc trưng hữu ích trong việc phát hiện tài liệu độc hại. Kết quả của quá trình xử lý này là một tập các đặc trưng - được liệt kê ở cấp cuối cùng. Các đặc trưng này sẽ là đầu vào của các mô hình học máy khi thực hiện phân loại tệp độc hại.
+
+\begin{itemize}
+	\item Phân tích cấu trúc của tệp PDF nhằm mục tiêu trích xuất các đặc trưng thống kê như từ khóa hay đường dẫn cấu trúc.
+	\item Tham chiếu API mã Javascript:  Quá trình xử lý và nhận diện các API được sử dụng trong mã javascript, bằng phương pháp phân tích tĩnh hoặc phân tích động. Cách tiếp cận này đã được đề xuất trong LuxOr. Đầu ra của quá trình này là các mẫu API được sử dụng nhiều trong các tài liệu độc hại hay các tài liệu lành tính.
+	\item Phân tích từ vựng: các đoạn mã javascript thường bị xáo trộn và làm phức tạp hóa, điều này yêu cầu một dạng biểu diễn trừu tượng hóa để loại bỏ các chi tiết không cần thiết và cô lập những đoạn mã thực sự liên quan để dễ dàng trong việc nhận diện và phát hiện bất thường. Một quy trình phân tích từ vựng mã nguồn sẽ hỗ trợ tự động hóa quá trình trừu tượng hóa như vậy. Cách tiếp cận này đã được đề xuất bởi Vatamanu và cộng sự [], sử dụng công cụ SpiderMonkey để trích xuất ra các javascript token.
+	\item Trích xuất opcode: một kỹ thuật tấn công được sử dụng trong các tài liệu PDF độc hại là xây dựng các đoạn mã shellcode trong thời gian thực thi bằng cách sao chép các chuỗi opcode ẩn giấu trong các biến. Do đó, một phương pháp phát hiện được đề xuất thực hiện phân tích động để xác định các biến có thể chứa các chuỗi opcode độc hại hoặc đáng ngờ. PDF Scrutinizer xây dựng một phương pháp phỏng đoán đề xác định vị trí nào cần để phân tích. MDScan [] chọn các chuỗi cần tìm shellcode bằng cách quan sát các chuỗi được tạo ra trong thời gian chạy, quét các vùng nhớ của các chuỗi mới được cấp phát.
+
+\end{itemize}
+
 \end{document}

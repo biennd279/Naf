@@ -55,7 +55,7 @@
 \DeclareGraphicsExtensions{.png,.eps,.svg}
 \setlist[description]{leftmargin=\parindent,labelindent=\parindent}
 
-\title{Phát triển một công cụ hỗ trợ phát hiện và khai thác tự động các lỗ hổng Web}
+\title{PHÁT TRIỂN CÔNG CỤ TRÍCH XUẤT VÀ ĐÁNH GIÁ ĐẶC TRƯNG PHỤC VỤ PHÁT HIỆN MÃ ĐỘC TRONG TÀI LIỆU PDF}
 
 \lstset{
   language        = php,
@@ -80,33 +80,17 @@
 
 \chapter*{Tóm tắt}
 
-Zed Attack Proxy (ZAP) là một công cụ mã nguồn mở giúp rà soát lỗ hổng tự động theo tập luật
-được phát triển liên tục bởi cộng đồng. Tuy nhiên, ZAP lại thiếu đi các công cụ xác minh và
-khai thác các lỗ hổng. Công cụ Nextgen Automation Framework (NAF) được phát triển trong
-khuôn khổ của khóa luận này sẽ giúp bổ sung cho ZAP về việc xác minh và khai thác lỗ hổng
-phía máy chủ Web tự động.
+Trong những năm gần đây, PDF hay viết tắt của Portable Document Format, đã trở thành một định dạng tiêu chuẩn để lưu trữ và trao đổi tài liệu nhờ tính linh hoạt và những chức năng hữu ích. Việc sử dụng rộng rãi đã tạo ra những lầm tưởng về sự an toàn của tài liệu PDF với người dùng. Tuy nhiên, các đặc tính của PDF đã thúc đẩy tin tặc khai thác nhiều loại lỗ hổng khác nhau, vượt qua các biện pháp bảo vệ an toàn, từ đó khiến tài liệu PDF trở thành một trong những phương tiện tấn công mã độc hiệu quả, trong các cuộc tấn công quy mô lớn đến các cuộc tấn công có chủ đích. Do đó việc phát hiện các tệp PDF độc hại là rất quan trọng trong bảo mật thông tin. Một số kỹ thuật phân tích sẽ được đề xuất trong tài liệu, để trích xuất các đặc trưng giá trị cho phép phân biệt phần mềm độc hại hay lành tính. Từ những kỹ thuật đánh giá đặc trưng thông thường có thể gặp nhiều hạn chế, các kỹ thuật dựa trên học máy đã được áp dụng phục vụ việc phát hiện tự động tệp PDF độc hại từ một tập các mẫu huấn luyện. Mô hình đã được chứng minh hiệu quả hơn khi kết hợp nhiều đặc trưng khác nhau. Tuy nhiên, bản thân mô hình này phải đối mặt với nhiều thách thức khi gặp phải các cuộc tấn công né tránh - khi mà những mẫu độc hại được biến đổi trông lành tính. Từ đó ở phần sau, khóa luận giới thiệu một thuật toán học máy mục tiêu tạo nên mô hình phân loại không có dương tính giả, đảm bảo mang đến một tường lửa lọc những tệp chắc chắn độc hại, còn những tệp sạch sẽ được xử lý nâng cao ở những giai đoạn tiếp theo.
 
-Các công cụ khai thác sẵn có như Invicti, Acunetix,\ldots cho phép xác minh một cách tự động các
-lỗ hổng Web nghiêm trọng như SQL Injection, Command Injection, Remote File Inclusion,
-Server Side Template Injection,\ldots là thực sự tồn tại giúp công tác kiểm thử an ninh được thực
-hiện một cách hiệu quả hơn, giảm thiểu các thao tác thủ công phức tạp tiêu tốn nhiều thời gian.
-
-Công cụ NAF của chúng tôi tích hợp vào ZAP các bộ công cụ mã nguồn mở phổ biến như SQLMap,
-Commix, Tplmap,\ldots biến ZAP trở thanh một công cụ vừa có chức năng dò quét vừa có chức năng
-xác minh tự động các lỗ hổng an ninh Web và cung cấp thêm các công cụ khai thác. Do đều là các
-công cụ mã nguồn mở được bảo trì liên tục nên có khả năng khai thác được miền rất rộng các
-lỗ hổng với kỹ thuật được cập nhật. Do còn phụ thuộc vào các tập luật được phát triển bởi cộng
-đồng và chưa có khả năng phát hiện được một số lỗ hổng khi rà quét nhưng NAF lại có khả năng xác
-minh và khai thác một số lỗ hổng nhiều hơn so với các công cụ thương mại như Invicti điển hình
-là lỗ hổng Server Side Template Injection.
 
 \chapter*{Lời cảm ơn}
+
 
 Lời đầu tiên cho phép em được gửi lời cảm ơn tới Khoa Công Nghệ Thông Tin - Trường Đại học Công
 Nghệ ĐHQG Hà Nội đã tạo điều kiện thuận lợi cho em được học tập, nghiên cứu và thực hiện
 đề tài tốt nghiệp này.
 
-Em cũng xin được bày tỏ lòng biết ơn sâu sắc tới thầy Nguyễn Đại Thọ đã tận tình hướng dẫn,
+Em cũng xin được bày tỏ lòng biết ơn sâu sắc tới thầy Lê Đình Thanh đã tận tình hướng dẫn,
 đóng góp những ý kiến giúp em hoàn thành khóa luận tốt nghiệp một cách tốt nhất.
 
 Em cũng vô cùng biết ơn các thầy cô trong trường tận tình giảng dạy, truyền thụ cho
@@ -132,32 +116,35 @@ hình thức kỷ luật theo quy định từ phía nhà trường.
 
 \lstlistoflistings
 
-\chapter{Mở đầu}
+\chapter*{Mở đầu}
 \pagenumbering{arabic}
 
 \subfile{./sections/section_1.tex}
 
-\chapter{Kiểm thử an ninh ứng dụng Web}
+\chapter{Kiến thức nền tảng}
 
-\section{Lỗ hổng ứng dụng Web}
 \subfile{./sections/section_2.tex}
 
-\chapter{Phát triển NAF - Một công cụ rà quét và xác minh tự động các lỗ hổng Web}
+\chapter{Kết hợp đặc trưng thống kê và cấu trúc cây trong phát hiện PDF độc hại}
 \subfile{./sections/section_3.tex}
 
-\chapter{Thử nghiệm và đánh giá}
+\chapter{Xây dựng mô hình phân loại Zero False Positive}
+
 \subfile{./sections/section_4.tex}
+
 
 \chapter{Kết luận}
 \subfile{./sections/section_5.tex}
 
+
 \appendix
-\chapter{Phụ lục mã nguồn ứng dụng chứa lỗ hổng}
+\chapter{Phụ lục chứng minh}
 \subfile{./sections/section_6.tex}
 
 
 
 \nocite{*}
+
 \printbibliography[heading=bibintoc, title=Tài liệu tham khảo]
 
 % \chapter*{Từ điển chú giải}
